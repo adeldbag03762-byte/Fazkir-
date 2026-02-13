@@ -3,126 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فذكّر - إعداد عبد الوكيل الحلبي</title>
+    <meta name="author" content="عبد الوكيل الحلبي">
+    <title>فذكّر PRO - عبد الوكيل الحلبي</title>
     <style>
-        :root { --gold: #d4af37; --bg: #050505; }
-        body {
-            margin: 0; background: var(--bg) url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1000&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover; color: #fff; font-family: 'Segoe UI', sans-serif;
-        }
-        .overlay { background: rgba(0,0,0,0.88); min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .wrapper { max-width: 500px; margin: auto; text-align: center; }
-        h1 { font-size: 3.5em; color: var(--gold); margin-bottom: 5px; text-shadow: 2px 2px 15px #000; }
-        .dev-tag { color: #eee; margin-bottom: 30px; border-bottom: 1px solid var(--gold); display: inline-block; padding-bottom: 5px; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #121212; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; overflow-x: hidden; }
+        .container { max-width: 500px; margin: auto; padding: 20px; }
         
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .m-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--gold);
-            padding: 25px 10px; border-radius: 20px; cursor: pointer; color: #fff; transition: 0.3s;
+        /* تصميم الإشعارات العلوي */
+        .notification-banner {
+            background: linear-gradient(90deg, #d4af37, #aa8a2e);
+            color: #000; padding: 10px; font-weight: bold; font-size: 0.9em;
+            cursor: pointer; display: none; margin-bottom: 15px; border-radius: 10px;
         }
-        .m-btn:hover { background: rgba(212,175,55,0.2); }
 
-        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .back { background: var(--gold); border: none; padding: 12px 30px; border-radius: 12px; font-weight: bold; margin-bottom: 25px; cursor: pointer; width: 100%; color: #000; }
-        
-        .card { background: rgba(255,255,255,0.06); border-radius: 15px; border-right: 5px solid var(--gold); padding: 15px; margin-bottom: 15px; text-align: right; }
-        
-        /* تصميم السبحة تحت كل ذكر */
-        .sub-tasbih {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-top: 15px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px;
-        }
-        .counter-val { font-size: 1.4em; color: var(--gold); font-family: monospace; }
-        .tap-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        h1 { font-size: 3em; color: var(--gold); margin-bottom: 10px; }
+        .prayer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .p-box { background: var(--card); padding: 10px; border-radius: 15px; border: 0.5px solid rgba(212,175,55,0.2); }
+        .p-box span { display: block; color: var(--gold); font-size: 0.8em; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid var(--gold); padding: 8px; text-align: center; }
-        th { background: var(--gold); color: #000; }
+        .m-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .m-btn { background: var(--card); border: 1px solid var(--gold); padding: 20px; border-radius: 20px; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .m-btn:active { transform: scale(0.95); }
+
+        /* شاشة المحتوى */
+        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; }
+
+        .azkar-card { background: var(--card); border-right: 4px solid var(--gold); padding: 20px; margin-bottom: 15px; border-radius: 15px; text-align: right; }
+        .t-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; }
+        .t-btn { background: var(--gold); border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
+        
+        .footer { margin-top: 40px; color: var(--gold); font-size: 0.8em; padding: 20px; }
     </style>
 </head>
 <body>
 
-<div class="overlay">
-    <div class="wrapper">
-        <h1>فذكّر</h1>
-        <div class="dev-tag">إعداد وتطوير: عبد الوكيل الحلبي</div>
-        
-        <div class="menu-grid">
-            <div class="m-btn" onclick="openAzkar('صباح')">☀️ أذكار الصباح</div>
-            <div class="m-btn" onclick="openAzkar('مساء')">🌙 أذكار المساء</div>
-            <div class="m-btn" onclick="openHadith()">📜 الأربعين النووية</div>
-            <div class="m-btn" onclick="openRamadan()">📅 إمساكية رمضان</div>
-        </div>
-        <div style="margin-top:30px; color:var(--gold);">كل الحقوق محفوظة لـ عبد الوكيل الحلبي</div>
+<div class="container">
+    <div id="notif-ask" class="notification-banner" onclick="requestNotif()">🔔 اضغط هنا لتفعيل إشعارات الأذان والتسبيح على شاشتك</div>
+    
+    <h1>فذكّر</h1>
+    <p style="color:#888;">إعداد: عبد الوكيل الحلبي</p>
+
+    <div class="prayer-grid">
+        <div class="p-box"><span>الفجر</span>05:51</div>
+        <div class="p-box"><span>الظهر</span>12:46</div>
+        <div class="p-box"><span>العصر</span>15:46</div>
+        <div class="p-box"><span>المغرب</span>18:11</div>
+        <div class="p-box"><span>العشاء</span>19:41</div>
+        <div class="p-box"><span>القبلة</span>195°</div>
     </div>
+
+    <div class="m-grid">
+        <div class="m-btn" onclick="openA('صباح')">☀️ أذكار الصباح</div>
+        <div class="m-btn" onclick="openA('مساء')">🌙 أذكار المساء</div>
+        <div class="m-btn" onclick="alert('سيتم فتح الأربعين النووية')">📜 الأربعين النووية</div>
+        <div class="m-btn" onclick="alert('سيتم فتح الإمساكية')">📅 إمساكية رمضان</div>
+    </div>
+
+    <div class="footer">تطوير عبد الوكيل الحلبي © 2026</div>
 </div>
 
 <div id="screen">
-    <button class="back" onclick="closeScreen()">رجوع ✕</button>
-    <div id="s-title" style="color:var(--gold); font-size:1.8em; text-align:center; margin-bottom:20px;"></div>
-    <div id="s-body"></div>
+    <div class="header">
+        <h2 id="st" style="color:var(--gold);"></h2>
+        <button class="close-btn" onclick="document.getElementById('screen').style.display='none'">إغلاق ✕</button>
+    </div>
+    <div id="sb"></div>
 </div>
 
 <script>
-    function closeScreen() { document.getElementById('screen').style.display='none'; }
+    // طلب صلاحية الإشعارات
+    if (Notification.permission !== "granted") {
+        document.getElementById('notif-ask').style.display = 'block';
+    }
 
-    // الأذكار التي أرسلتها حرفياً
-    const myAzkar = [
-        { t: "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم.", n: 7, r: "رواه أبو داود" },
-        { t: "اللهم إني أصبحت/أمسيت، أشهدك وأشهد حملة عرشك وملائكتك وجميع خلقك أنك أنت الله، وحدك لا شريك لك وأن محمداً عبدك ورسولك.", n: 4, r: "رواه أبو داود والترمذي" },
-        { t: "لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، يحيي ويميت، وهو على كل شيء قدير.", n: 10, r: "رواه ابن حبان" },
-        { t: "سبحان الله وبحمده. أو: سبحان الله العظيم وبحمده.", n: 100, r: "رواه مسلم" },
-        { t: "أستغفر الله.", n: 100, r: "رواه ابن أبي شيبة" },
-        { t: "سبحان الله، والحمد لله، والله أكبر، لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، وهو على كل شيء قدير.", n: 100, r: "رواه الترمذي" }
-    ];
-
-    function openAzkar(type) {
-        document.getElementById('screen').style.display='block';
-        document.getElementById('s-title').innerText = "أذكار " + type;
-        let html = "";
-        myAzkar.forEach((item, i) => {
-            let text = item.t.replace("أصبحت/أمسيت", (type=='صباح'?'أصبحت':'أمسيت'));
-            html += `
-                <div class="card">
-                    <p>${text}</p>
-                    <small style="color:#aaa;">${item.r}</small>
-                    <div class="sub-tasbih">
-                        <span class="counter-val" id="c${i}">0 / ${item.n}</span>
-                        <button class="tap-btn" onclick="count(${i}, ${item.n})">تسبيح</button>
-                    </div>
-                </div>`;
+    function requestNotif() {
+        Notification.requestPermission().then(perm => {
+            if (perm === "granted") {
+                document.getElementById('notif-ask').style.display = 'none';
+                new Notification("فذكّر", { body: "تم تفعيل الإشعارات بنجاح يا أستاذ عبد الوكيل", icon: "https://cdn-icons-png.flaticon.com/512/2972/2972350.png" });
+            }
         });
-        document.getElementById('s-body').innerHTML = html;
+    }
+
+    // محاكي الأذان (إشعار عند وقت الصلاة)
+    function checkPrayerTime() {
+        const now = new Date();
+        const time = now.getHours() + ":" + now.getMinutes();
+        // مثال: إذا كانت الساعة 18:11 (وقت المغرب)
+        if (time === "18:11") {
+            new Notification("حان الآن موعد أذان المغرب", { body: "حي على الصلاة.. حي على الفلاح", sound: "azan.mp3" });
+        }
+    }
+    setInterval(checkPrayerTime, 60000); // يفحص كل دقيقة
+
+    // وظائف الأذكار
+    function openA(type) {
+        const azkar = [
+            {t: "حسبي الله لا إله إلا هو عليه توكلت..", n: 7},
+            {t: "سبحان الله وبحمده", n: 100}
+        ];
+        document.getElementById('st').innerText = "أذكار " + type;
+        let h = "";
+        azkar.forEach((item, i) => {
+            h += `<div class="azkar-card">
+                    <p>${item.t}</p>
+                    <div class="t-row">
+                        <span id="v${i}" style="color:var(--gold); font-size:1.2em;">0 / ${item.n}</span>
+                        <button class="t-btn" onclick="count(${i}, ${item.n})">سبّح</button>
+                    </div>
+                  </div>`;
+        });
+        document.getElementById('sb').innerHTML = h;
+        document.getElementById('screen').style.display = 'block';
     }
 
     function count(id, max) {
-        let el = document.getElementById('c'+id);
-        let val = parseInt(el.innerText.split(' / ')[0]);
-        if (val < max) {
-            el.innerText = (val + 1) + " / " + max;
-            if(val + 1 === max) el.style.color = "#2ecc71";
+        let el = document.getElementById('v'+id);
+        let c = parseInt(el.innerText.split(' / ')[0]);
+        if (c < max) {
+            el.innerText = (c + 1) + " / " + max;
+            if (navigator.vibrate) navigator.vibrate(50);
         }
-    }
-
-    // الأحاديث التي أرسلتها
-    function openHadith() {
-        document.getElementById('screen').style.display='block';
-        document.getElementById('s-title').innerText = "الأربعين النووية (50 حديثاً)";
-        document.getElementById('s-body').innerHTML = `
-            <div class="card"><b>الحديث الأول:</b><br>إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى...</div>
-            <div class="card"><b>الحديث الخمسون:</b><br>عن عبد الله بن بسر قال: أتى النبي ﷺ رجل فقال: يا رسول الله إن شرائع الإسلام قد كثرت علينا، فباب نتمسك به جامع؟ قال: "لا يزال لسانك رطبًا من ذكر الله عز وجل".</div>
-            <p style="text-align:center; color:var(--gold);">تم إدراج جميع الأحاديث التي زودتنا بها أستاذ عبد الوكيل.</p>
-        `;
-    }
-
-    function openRamadan() {
-        document.getElementById('screen').style.display='block';
-        document.getElementById('s-title').innerText = "إمساكية رمضان - عبد الوكيل الحلبي";
-        document.getElementById('s-body').innerHTML = `
-            <table>
-                <tr><th>اليوم</th><th>الإمساك</th><th>الإفطار</th></tr>
-                <tr><td>1 رمضان</td><td>04:30 ص</td><td>06:15 م</td></tr>
-            </table>`;
     }
 </script>
 </body>
