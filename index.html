@@ -10,32 +10,35 @@
             background: url('https://raw.githubusercontent.com/abomalik/assets/main/mosque_bg.jpg') no-repeat center center fixed;
             background-size: cover; font-family: Arial, sans-serif; color: white; text-align: center;
         }
-        .overlay { background: rgba(0,0,0,0.75); min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .overlay { background: rgba(0,0,0,0.8); min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .btn {
             display: block; width: 90%; max-width: 400px; margin: 15px auto; padding: 18px;
             background: linear-gradient(to right, #d4af37, #f9df7b);
             color: black; text-decoration: none; border-radius: 15px;
             font-weight: bold; font-size: 1.1em; border: none; cursor: pointer;
         }
-        .footer { margin-top: 30px; font-size: 0.9em; opacity: 0.8; }
+        #hadithBox { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: none; margin-top: 15px; text-align: right; border: 1px solid gold; overflow-y: auto; max-height: 250px; }
     </style>
 </head>
 <body>
     <div class="overlay">
-        <h1 style="color: #d4af37; font-size: 2.5em; margin-bottom: 5px;">فذكّر</h1>
-        <p style="margin-bottom: 30px;">جامع خالد بن الوليد</p>
-        
+        <h1 style="color: #d4af37;">فذكّر</h1>
+        <p>جامع خالد بن الوليد</p>
         <button class="btn" onclick="document.getElementById('azan').play()">📢 رفع الأذان الآن</button>
-        
-        <a href="https://quran.com/1?startingVerse=1&translations=131" class="btn">📖 القرآن الكريم (مع التفسير)</a>
-        
+        <a href="https://quran.com/1?translations=131" class="btn">📖 القرآن الكريم (مع التفسير)</a>
         <a href="https://qiblafinder.withgoogle.com/" class="btn">🧭 اتجاه القبلة (البوصلة)</a>
-        
-        <button class="btn" onclick="alert('سيتم إضافة الأحاديث كاملة بعد رفع الملف')">📜 الأربعين النووية</button>
-
+        <button class="btn" onclick="toggleHadith()">📜 الأربعين النووية</button>
+        <div id="hadithBox">
+            <h3 style="text-align:center;">الحديث الأول</h3>
+            <p>عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: "إنما الأعمال بالنيات..."</p>
+        </div>
         <audio id="azan" src="https://www.islamcan.com/common/azan/azan1.mp3"></audio>
-
-        <div class="footer">صدقة جارية لرواد جامع خالد بن الوليد</div>
     </div>
+    <script>
+        function toggleHadith() {
+            var box = document.getElementById('hadithBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
