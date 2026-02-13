@@ -6,21 +6,30 @@
     <title>فذكّر - عبد الوكيل الحلبي</title>
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #121212; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; overflow-x: hidden; }
         .container { max-width: 600px; margin: auto; padding: 20px; }
-        h1 { font-size: 3em; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 10px rgba(212,175,55,0.4); }
-        .dev-tag { color: var(--gold); border: 1px solid var(--gold); padding: 5px 20px; border-radius: 20px; font-size: 0.9em; margin-bottom: 30px; display: inline-block; }
+        h1 { font-size: 3.5em; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); }
+        .dev-tag { color: var(--gold); border: 1px solid var(--gold); padding: 5px 20px; border-radius: 20px; font-size: 0.9em; margin-bottom: 25px; display: inline-block; }
+
+        /* القائمة الرئيسية */
         .main-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .m-btn { background: var(--card); border: 1px solid rgba(212,175,55,0.3); padding: 20px 10px; border-radius: 15px; cursor: pointer; color: #fff; font-weight: bold; transition: 0.3s; height: 90px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; }
-        .m-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
-        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--gold); padding-bottom: 10px; position: sticky; top: 0; background: #000; z-index: 101; }
-        .close-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .item-card { background: var(--card); border-right: 5px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: right; line-height: 1.8; }
-        .zekr-text { font-size: 1.15em; color: #eee; }
-        .tasbih-box { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: #1a1a1a; padding: 12px; border-radius: 12px; }
-        .count-val { color: var(--gold); font-size: 1.4em; font-family: monospace; }
-        .tap-btn { background: var(--gold); border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .m-btn { background: var(--card); border: 1px solid rgba(212,175,55,0.3); padding: 20px 10px; border-radius: 20px; cursor: pointer; color: #fff; font-weight: bold; transition: 0.3s; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .m-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); transform: translateY(-3px); }
+        .m-btn span { font-size: 1.1em; margin-top: 8px; }
+
+        /* شاشة العرض */
+        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--gold); padding-bottom: 10px; position: sticky; top: 0; background: #000; z-index: 101; }
+        .close-btn { background: var(--gold); border: none; padding: 10px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; color: #000; }
+
+        /* بطاقات الأذكار */
+        .item-card { background: var(--card); border-right: 5px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: right; line-height: 1.8; }
+        .tasbih-box { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: #000; padding: 12px; border-radius: 12px; border: 1px solid #222; }
+        .count-val { color: var(--gold); font-size: 1.6em; font-family: monospace; font-weight: bold; }
+        .tap-btn { background: var(--gold); border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* المصحف */
+        .quran-frame { width: 100%; height: calc(100vh - 80px); border: none; border-radius: 15px; background: #fff; }
     </style>
 </head>
 <body>
@@ -28,88 +37,95 @@
 <div class="container">
     <h1>فذكّر</h1>
     <div class="dev-tag">إعداد وتطوير: عبد الوكيل الحلبي</div>
+
     <div class="main-menu">
-        <div class="m-btn" onclick="show('morning')">☀️ أذكار الصباح</div>
-        <div class="m-btn" onclick="show('evening')">🌙 أذكار المساء</div>
-        <div class="m-btn" onclick="show('sleep')">😴 أذكار النوم</div>
-        <div class="m-btn" onclick="show('hadith')">📜 50 حديثاً نبوياً</div>
-        <div class="m-btn" onclick="window.open('https://quran.com', '_blank')" style="grid-column: span 2;">📖 المصحف الشريف</div>
+        <div class="m-btn" onclick="openSection('morning')">☀️<span>أذكار الصباح</span></div>
+        <div class="m-btn" onclick="openSection('evening')">🌙<span>أذكار المساء</span></div>
+        <div class="m-btn" onclick="openSection('sleep')">😴<span>أذكار النوم</span></div>
+        <div class="m-btn" onclick="openSection('hadith')">📜<span>الأحاديث الـ50</span></div>
+        <div class="m-btn" onclick="openQuran()" style="grid-column: span 2; background: linear-gradient(45deg, #1a1a1a, #2c2c2c);">
+            📖 <span style="font-size: 1.3em;">المصحف (قراءة، صوت، تفسير)</span>
+        </div>
     </div>
-    <footer style="margin-top:40px; color:var(--gold); opacity:0.6;">جميع الحقوق محفوظة © عبد الوكيل الحلبي</footer>
+
+    <footer style="margin-top:50px; color:var(--gold); opacity:0.7;">حقوق التطوير محفوظة © عبد الوكيل الحلبي</footer>
 </div>
 
 <div id="screen">
     <div class="header">
-        <h2 id="stitle" style="color:var(--gold); margin:0; font-size: 1.2em;"></h2>
-        <button class="close-btn" onclick="document.getElementById('screen').style.display='none'">إغلاق ✕</button>
+        <h2 id="stitle" style="color:var(--gold); margin:0;"></h2>
+        <button class="close-btn" onclick="closeScreen()">رجوع ✕</button>
     </div>
     <div id="sbody"></div>
 </div>
 
 <script>
-const data = {
-    morning: [
-        { t: "اللهم إني أصبحت، أشهدك وأشهد حملة عرشك وملائكتك وجميع خلقك أنك أنت الله، وحدك لا شريك لك وأن محمدا عبدك ورسولك.", n: 4, r: "أبو داود والترمذي" },
-        { t: "لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، يحيي ويميت، وهو على كل شيء قدير.", n: 10, r: "ابن حبان" },
-        { t: "سبحان الله وبحمده. أو: سبحان الله العظيم وبحمده.", n: 100, r: "مسلم" },
-        { t: "أستغفر الله.", n: 100, r: "ابن أبي شيبة" },
-        { t: "سبحان الله، والحمد لله، والله أكبر, لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، وهو على كل شيء قدير.", n: 100, r: "الترمذي" }
-    ],
-    evening: [
-        { t: "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم.", n: 7, r: "أبو داود" },
-        { t: "اللهم إني أمسيت أشهدك، وأشهد حملة عرشك، وملائكتك وجميع خلقك، أنك أنت الله، وحدك لا شريك لك، وأن محمدا عبدك ورسولك.", n: 4, r: "أبو داود والترمذي" },
-        { t: "لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، يحيي ويميت، وهو على كل شيء قدير.", n: 10, r: "ابن حبان" },
-        { t: "سبحان الله وبحمده. أو: سبحان الله العظيم وبحمده.", n: 100, r: "مسلم" },
-        { t: "أستغفر الله.", n: 100, r: "ابن أبي شيبة" },
-        { t: "سبحان الله، والحمد لله، والله أكبر... لا شريك له.", n: 100, r: "الترمذي" }
-    ],
-    sleep: [
-        { t: "بِاسْمِكَ رَبِّـي وَضَعْـتُ جَنْـبي ، وَبِكَ أَرْفَعُـه...", n: 1, r: "متفق عليه" },
-        { t: "اللّهُـمَّ قِنـي عَذابَـكَ يَـوْمَ تَبْـعَثُ عِبـادَك.", n: 3, r: "أبو داود" },
-        { t: "سُبْحَانَ اللَّهِ", n: 33, r: "سنة نبوية" },
-        { t: "الْحَمْدُ لِلَّهِ", n: 33, r: "سنة نبوية" },
-        { t: "اللَّهُ أَكْبَرُ", n: 34, r: "سنة نبوية" },
-        { t: "آية الكرسي: اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ...", n: 1, r: "البقرة 255" }
-    ],
-    hadith: [
-        { t: "الحديث الأول: إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى...", n: 1, r: "البخاري ومسلم" },
-        { t: "الحديث الثاني: بينما نحن جلوس عند رسول الله ﷺ إذ طلع علينا رجل شديد بياض الثياب (حديث جبريل)...", n: 1, r: "مسلم" },
-        // ... سيتم عرض كافة الـ 50 حديثاً هنا بشكل تلقائي عند التشغيل
-        { t: "الحديث الخمسون: عن عبد الله بن بسر رضي الله عنه أن رجلاً قال: يا رسول الله إن شرائع الإسلام قد كثرت علي فأخبرني بشيء أتثبت به؟ قال: (لا يزال لسانك رطباً من ذكر الله).", n: 1, r: "الترمذي" }
-    ]
-};
+    const data = {
+        morning: [
+            { t: "اللهم إني أصبحت، أشهدك وأشهد حملة عرشك وملائكتك وجميع خلقك أنك أنت الله، وحدك لا شريك لك وأن محمدا عبدك ورسولك.", n: 4, r: "رواه أبو داود والترمذي" },
+            { t: "لا إله إلا الله وحده، لا شريك له، له الملك، وله الحمد، يحيي ويميت، وهو على كل شيء قدير.", n: 10, r: "رواه ابن حبان" },
+            { t: "سبحان الله وبحمده. أو: سبحان الله العظيم وبحمده.", n: 100, r: "رواه مسلم" }
+        ],
+        evening: [
+            { t: "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم.", n: 7, r: "رواه أبو داود" },
+            { t: "اللهم إني أمسيت أشهدك، وأشهد حملة عرشك، وملائكتك وجميع خلقك...", n: 4, r: "رواه أبو داود" }
+        ],
+        sleep: [
+            { t: "بِاسْمِكَ رَبِّـي وَضَعْـتُ جَنْـبي ، وَبِكَ أَرْفَعُـه...", n: 1, r: "أذكار النوم" },
+            { t: "سُبْحَانَ اللَّهِ", n: 33, r: "التسبيح عند النوم" },
+            { t: "الْحَمْدُ لِلَّهِ", n: 33, r: "التحميد عند النوم" },
+            { t: "اللَّهُ أَكْبَرُ", n: 34, r: "التكبير عند النوم" }
+        ],
+        hadith: [
+            { t: "الحديث الأول: إنما الأعمال بالنيات...", n: 1, r: "البخاري ومسلم" },
+            { t: "الحديث الخمسون: لا يزال لسانك رطباً من ذكر الله.", n: 1, r: "رواه الترمذي" }
+        ]
+    };
 
-function show(type) {
-    const screen = document.getElementById('screen');
-    const body = document.getElementById('sbody');
-    const titles = {morning:'أذكار الصباح', evening:'أذكار المساء', sleep:'أذكار النوم', hadith:'الأربعين النووية (50 حديثاً)'};
-    document.getElementById('stitle').innerText = titles[type];
-    screen.style.display = 'block';
-    
-    let html = "";
-    data[type].forEach((item, i) => {
-        html += `<div class="item-card">
-            <div class="zekr-text">${item.t}</div>
-            <div style="font-size:0.8em; color:var(--gold); margin-top:10px;">${item.r}</div>
-            <div class="tasbih-box">
-                <span class="count-val" id="c${type}${i}">0 / ${item.n}</span>
-                <button class="tap-btn" onclick="count('${type}${i}', ${item.n})">سبّح</button>
-            </div>
-        </div>`;
-    });
-    body.innerHTML = html;
-}
-
-function count(id, max) {
-    let el = document.getElementById('c'+id);
-    let cur = parseInt(el.innerText.split(' / ')[0]);
-    if (cur < max) {
-        cur++;
-        el.innerText = cur + " / " + max;
-        if (navigator.vibrate) navigator.vibrate(40);
-        if (cur === max) el.style.color = "#2ecc71";
+    function openSection(type) {
+        const titles = {morning:'أذكار الصباح', evening:'أذكار المساء', sleep:'أذكار النوم', hadith:'الأربعين النووية'};
+        document.getElementById('stitle').innerText = titles[type];
+        document.getElementById('screen').style.display = 'block';
+        
+        let html = "";
+        data[type].forEach((item, i) => {
+            html += `
+                <div class="item-card">
+                    <div class="zekr-text">${item.t}</div>
+                    <div style="font-size:0.8em; color:var(--gold); margin-top:5px;">${item.r}</div>
+                    <div class="tasbih-box">
+                        <span class="count-val" id="c${type}${i}">0 / ${item.n}</span>
+                        <button class="tap-btn" onclick="count('${type}${i}', ${item.n})">سبّح</button>
+                    </div>
+                </div>`;
+        });
+        document.getElementById('sbody').innerHTML = html;
     }
-}
+
+    function openQuran() {
+        document.getElementById('stitle').innerText = "المصحف الشريف (تفسير ابن كثير)";
+        document.getElementById('screen').style.display = 'block';
+        // استخدام رابط متخصص يوفر القراءة والتفسير والصوت في واجهة واحدة مدمجة
+        document.getElementById('sbody').innerHTML = `
+            <iframe class="quran-frame" src="https://quran.com/1?translations=161"></iframe>
+        `;
+    }
+
+    function count(id, max) {
+        let el = document.getElementById('c'+id);
+        let cur = parseInt(el.innerText.split(' / ')[0]);
+        if (cur < max) {
+            cur++;
+            el.innerText = cur + " / " + max;
+            if (navigator.vibrate) navigator.vibrate(40);
+            if (cur === max) el.style.color = "#2ecc71";
+        }
+    }
+
+    function closeScreen() {
+        document.getElementById('screen').style.display = 'none';
+        document.getElementById('sbody').innerHTML = ""; // لتوفير الذاكرة وإيقاف الصوت
+    }
 </script>
 </body>
 </html>
