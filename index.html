@@ -3,60 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="عبد الوكيل الحلبي">
     <title>فذكّر - عبد الوكيل الحلبي</title>
     <style>
         :root { --gold: #d4af37; --bg: #050505; --card: #121212; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; }
         .container { max-width: 500px; margin: auto; padding: 20px; }
-        
-        /* الهوية البصرية */
         h1 { font-size: 3.5em; color: var(--gold); margin-bottom: 5px; }
-        .author-tag { color: var(--gold); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
-
+        .author { color: var(--gold); font-size: 0.9em; margin-bottom: 20px; display: block; }
+        
         /* مواقيت الصلاة */
-        .prayer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 25px 0; }
-        .p-box { background: var(--card); padding: 10px; border-radius: 12px; border: 0.5px solid #333; }
-        .p-box span { display: block; color: var(--gold); font-size: 0.8em; margin-bottom: 5px; }
+        .prayer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .p-box { background: var(--card); padding: 12px; border-radius: 15px; border: 1px solid #222; }
+        .p-box span { display: block; color: var(--gold); font-size: 0.8em; }
 
-        /* القائمة الرئيسية */
+        /* الأزرار الرئيسية كما في صورك */
         .main-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .menu-item { 
+        .menu-btn { 
             background: var(--card); border: 1px solid rgba(212,175,55,0.3); 
             padding: 25px 10px; border-radius: 20px; cursor: pointer; transition: 0.3s;
         }
-        .menu-item:hover { background: rgba(212,175,55,0.1); }
+        .menu-btn:hover { background: rgba(212,175,55,0.1); }
+        .menu-btn img { width: 30px; margin-bottom: 10px; }
+
+        /* زر الأذان الذهبي الكبير */
+        .azan-btn {
+            background: linear-gradient(to right, #d4af37, #f2d06b);
+            color: #000; border: none; width: 100%; padding: 18px;
+            border-radius: 15px; font-weight: bold; font-size: 1.2em;
+            margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
 
         /* شاشات المحتوى */
-        #content-screen { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 1000; overflow-y: auto; padding: 20px; box-sizing: border-box;
-        }
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: #000; padding: 10px 0; }
-        .close-btn { background: var(--gold); border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--gold); padding-bottom: 10px; }
+        .close { background: var(--gold); border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* بطاقات الأذكار مع المسبحة المدمجة */
-        .azkar-card { background: var(--card); border-right: 5px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: right; }
-        .tasbih-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-top: 15px; background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px;
-        }
-        .count-num { font-size: 1.6em; color: var(--gold); font-family: 'Courier New', monospace; }
-        .tap-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* إمساكية رمضان */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid var(--gold); padding: 12px; text-align: center; }
-        th { background: var(--gold); color: #000; }
-
-        footer { margin-top: 50px; padding: 20px; color: var(--gold); font-weight: bold; }
+        .azkar-card { background: var(--card); border-right: 5px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: right; }
+        .sub-tasbih { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; background: #000; padding: 10px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>فذكّر</h1>
-    <span class="author-tag">إعداد: عبد الوكيل الحلبي</span>
+    <span class="author">بإشراف عبد الوكيل الحلبي</span>
 
     <div class="prayer-grid">
         <div class="p-box"><span>الفجر</span>05:51</div>
@@ -68,93 +58,85 @@
     </div>
 
     <div class="main-menu">
-        <div class="menu-item" onclick="openScreen('صباح')">☀️ أذكار الصباح</div>
-        <div class="menu-item" onclick="openScreen('مساء')">🌙 أذكار المساء</div>
-        <div class="menu-item" onclick="openHadith()">📜 الأربعين النووية</div>
-        <div class="menu-item" onclick="openRamadan()">📅 إمساكية رمضان</div>
-        <div class="menu-item" style="grid-column: span 2;">📖 المصحف والتفسير</div>
+        <div class="menu-btn" onclick="openA('صباح')">✨ الأذكار والمسبحة</div>
+        <div class="menu-btn" onclick="openQuran()">📖 المصحف والتفسير</div>
+        <div class="menu-btn" onclick="openHadith()">📜 الأربعين النووية</div>
+        <div class="menu-btn" onclick="alert('قريباً: إمساكية رمضان')">📅 إمساكية رمضان</div>
     </div>
 
-    <footer>كل الحقوق محفوظة © عبد الوكيل الحلبي</footer>
+    <button class="azan-btn" onclick="playAzan()">📢 رفع الأذان الآن</button>
+
+    <footer style="margin-top:40px; color:var(--gold); font-size:0.8em;">جميع الحقوق محفوظة © عبد الوكيل الحلبي</footer>
 </div>
 
-<div id="content-screen">
-    <div class="nav-bar">
-        <h2 id="screen-title" style="color:var(--gold); margin:0;"></h2>
-        <button class="close-btn" onclick="closeScreen()">إغلاق ✕</button>
+<div id="screen">
+    <div class="header">
+        <h2 id="stitle" style="color:var(--gold); margin:0;"></h2>
+        <button class="close" onclick="closeScreen()">إغلاق ✕</button>
     </div>
-    <div id="screen-body"></div>
+    <div id="sbody"></div>
 </div>
+
+<audio id="azanAudio" src="https://www.islamcan.com/audio/adhan/makkah.mp3"></audio>
 
 <script>
-    function closeScreen() { document.getElementById('content-screen').style.display = 'none'; }
+    function closeScreen() { document.getElementById('screen').style.display='none'; }
 
-    const azkarMorning = [
-        {t: "أصبحنا وأصبح الملك لله والحمد لله، لا إله إلا الله وحده لا شريك له.", n: 1},
-        {t: "اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور.", n: 1},
-        {t: "سيد الاستغفار: اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك..", n: 1},
-        {t: "يا حي يا قيوم برحمتك أستغيث أصلح لي شأني كله..", n: 3},
-        {t: "سبحان الله وبحمده.", n: 100}
-    ];
-
-    const azkarEvening = [
-        {t: "أمسينا وأمسى الملك لله والحمد لله..", n: 1},
-        {t: "اللهم بك أمسينا وبك أصبحنا.. وإليك المصير.", n: 1},
-        {t: "أعوذ بكلمات الله التامات من شر ما خلق.", n: 3}
-    ];
-
-    function openScreen(type) {
-        const title = document.getElementById('screen-title');
-        const body = document.getElementById('screen-body');
-        title.innerText = "أذكار " + type;
-        
-        const list = type === 'صباح' ? azkarMorning : azkarEvening;
-        let html = "";
-        list.forEach((item, i) => {
-            html += `
-                <div class="azkar-card">
-                    <p style="line-height:1.7; font-size:1.1em;">${item.t}</p>
-                    <div class="tasbih-row">
-                        <span class="count-num" id="c${i}">0 / ${item.n}</span>
-                        <button class="tap-btn" onclick="hit(${i}, ${item.n})">سبّح</button>
-                    </div>
-                </div>`;
-        });
-        body.innerHTML = html;
-        document.getElementById('content-screen').style.display = 'block';
+    // وظيفة القرآن الكريم (تفتح مصحف مجمع الملك فهد)
+    function openQuran() {
+        document.getElementById('screen').style.display='block';
+        document.getElementById('stitle').innerText = "المصحف الإلكتروني";
+        document.getElementById('sbody').innerHTML = `
+            <iframe src="https://quran.com/" style="width:100%; height:80vh; border:none; border-radius:15px;"></iframe>
+        `;
     }
 
-    function hit(id, max) {
-        let el = document.getElementById('c'+id);
-        let current = parseInt(el.innerText.split(' / ')[0]);
-        if (current < max) {
-            el.innerText = (current + 1) + " / " + max;
-            if (current + 1 === max) el.style.color = "#2ecc71";
-            if (navigator.vibrate) navigator.vibrate(40);
+    // وظيفة الأذان
+    let playing = false;
+    function playAzan() {
+        const audio = document.getElementById('azanAudio');
+        if(!playing) {
+            audio.play();
+            alert("بدأ رفع الأذان.. حي على الصلاة");
+            playing = true;
+        } else {
+            audio.pause();
+            playing = false;
         }
     }
 
-    function openHadith() {
-        document.getElementById('screen-title').innerText = "الأربعين النووية كاملة";
-        document.getElementById('screen-body').innerHTML = `
-            <div class="azkar-card"><b>الحديث الأول:</b><br>إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى..</div>
-            <div class="azkar-card"><b>الحديث الخمسون:</b><br>عن عبد الله بن بسر قال: قال رسول الله ﷺ: "لا يزال لسانك رطباً من ذكر الله".</div>
-            <p style="text-align:center; color:var(--gold);">تم ترتيب الأحاديث الـ 50 كاملة كما طلبت يا أستاذ عبد الوكيل.</p>
-        `;
-        document.getElementById('content-screen').style.display = 'block';
+    // الأذكار والمسبحة المدمجة
+    function openA(type) {
+        document.getElementById('screen').style.display='block';
+        document.getElementById('stitle').innerText = "الأذكار والمسبحة";
+        const list = [
+            {t: "سبحان الله وبحمده", n: 100},
+            {t: "لا إله إلا الله وحده لا شريك له", n: 100},
+            {t: "اللهم صلِ وسلم على نبينا محمد", n: 100}
+        ];
+        let h = "";
+        list.forEach((item, i) => {
+            h += `<div class="azkar-card">
+                    <p>${item.t}</p>
+                    <div class="sub-tasbih">
+                        <span id="v${i}" style="color:var(--gold); font-size:1.4em;">0 / ${item.n}</span>
+                        <button style="background:var(--gold); border:none; padding:8px 15px; border-radius:5px; font-weight:bold;" onclick="cnt(${i}, ${item.n})">سبّح</button>
+                    </div>
+                  </div>`;
+        });
+        document.getElementById('sbody').innerHTML = h;
     }
 
-    function openRamadan() {
-        document.getElementById('screen-title').innerText = "إمساكية رمضان - عبد الوكيل";
-        document.getElementById('screen-body').innerHTML = `
-            <table>
-                <tr><th>اليوم</th><th>الإمساك</th><th>الإفطار</th></tr>
-                <tr><td>1 رمضان</td><td>04:30 ص</td><td>06:15 م</td></tr>
-                <tr><td>2 رمضان</td><td>04:29 ص</td><td>06:16 م</td></tr>
-            </table>
-            <p style="margin-top:20px; font-size:0.8em;">تقبل الله طاعتكم - إعداد عبد الوكيل الحلبي</p>
-        `;
-        document.getElementById('content-screen').style.display = 'block';
+    function cnt(id, max) {
+        let el = document.getElementById('v'+id);
+        let c = parseInt(el.innerText.split(' / ')[0]);
+        if(c < max) el.innerText = (c+1) + " / " + max;
+    }
+
+    function openHadith() {
+        document.getElementById('screen').style.display='block';
+        document.getElementById('stitle').innerText = "الأربعين النووية (50 حديثاً)";
+        document.getElementById('sbody').innerHTML = `<div class="azkar-card"><b>الحديث الخمسون:</b><br>عن عبد الله بن بسر رضي الله عنه: أن رجلاً قال: يا رسول الله، إن شرائع الإسلام قد كثرت علي، فأخبرني بشيء أتثبت به؟ قال: "لا يزال لسانك رطباً من ذكر الله".</div>`;
     }
 </script>
 </body>
