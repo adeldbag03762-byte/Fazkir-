@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -117,6 +118,7 @@
             <button class="button" onclick="openMe('evening')">أذكار المساء</button>
             <button class="button" onclick="openMe('sleep')">أذكار النوم</button>
             <button class="button" onclick="openMe('hadith')">الأربعون النووية</button>
+            <button class="button" onclick="playAdhan()">تشغيل الأذان</button>
         </div>
 
         <!-- الشاشة التي تعرض المحتوى عند الضغط على الأزرار -->
@@ -126,6 +128,12 @@
             <button class="button" onclick="closeMe()">إغلاق</button>
         </div>
     </div>
+
+    <!-- إضافة صوت الأذان -->
+    <audio id="adhan-audio">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav"> <!-- تغيير الرابط إلى صوت الأذان الفعلي -->
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         // بيانات أوقات الصلاة والإمساكية
@@ -140,18 +148,24 @@
             morning: [
                 { t: "سبحان الله وبحمده", n: 100 },
                 { t: "استغفر الله", n: 100 },
-                { t: "اللهم إني أسالك العافية", n: 10 }
+                { t: "اللهم إني أسالك العافية", n: 10 },
+                { t: "اللهم صل وسلم على سيدنا محمد", n: 100 }
             ],
             evening: [
                 { t: "اللهم أجرني من النار", n: 100 },
-                { t: "اللهم اهدني واهد بي", n: 50 }
+                { t: "اللهم اهدني واهد بي", n: 50 },
+                { t: "بسم الله الرحمن الرحيم", n: 50 }
             ],
             sleep: [
-                { t: "باسمك اللهم أموت وأحيا", n: 3 }
+                { t: "باسمك اللهم أموت وأحيا", n: 3 },
+                { t: "اللهم قني عذابك يوم تبعث عبادك", n: 3 }
             ],
             hadith: [
                 { t: "حديث 1: إنما الأعمال بالنيات", n: 1 },
-                { t: "حديث 2: من لا يشكر الناس لا يشكر الله", n: 1 }
+                { t: "حديث 2: من لا يشكر الناس لا يشكر الله", n: 1 },
+                { t: "حديث 3: من لا يحب لأخيه ما يحب لنفسه فهو ليس منا", n: 1 },
+                { t: "حديث 4: المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف", n: 1 },
+                { t: "حديث 5: لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه", n: 1 }
             ]
         };
 
@@ -192,17 +206,3 @@
         function cnt(id, max) {
             let el = document.getElementById('c' + id);
             let c = parseInt(el.innerText.split(' / ')[0]);
-            if (c < max) {
-                c++; el.innerText = c + " / " + max;
-                if (c === max) el.style.color = "#2ecc71";
-                if (navigator.vibrate) navigator.vibrate(40);
-            }
-        }
-
-        function closeMe() {
-            document.getElementById('screen').style.display = 'none';
-            document.getElementById('sbody').innerHTML = '';
-        }
-    </script>
-</body>
-</html>
