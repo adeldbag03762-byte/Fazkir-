@@ -196,7 +196,214 @@
                             <div>${item.t}</div>
                             <div class="count-row">
                                 <button class="tap-btn" onclick="cnt('${type}${i}', ${item.n})">سبّح</button>
+                         
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامج فذكر</title>
+    <style>
+        /* إعدادات التنسيق الأساسية */
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .item-card {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .count-row {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .count-val {
+            margin-left: 10px;
+        }
+
+        .tap-btn {
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tap-btn:hover {
+            background-color: #27ae60;
+        }
+
+        #screen {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        #stitle {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #sbody {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .subheading {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>برنامج فذكر</h1>
+        <div>
+            <button class="button" onclick="openMe('quran')">القرآن الكريم</button>
+            <button class="button" onclick="openMe('imsaqiya')">الإمساكية</button>
+            <button class="button" onclick="openMe('morning')">أذكار الصباح</button>
+            <button class="button" onclick="openMe('evening')">أذكار المساء</button>
+            <button class="button" onclick="openMe('sleep')">أذكار النوم</button>
+            <button class="button" onclick="openMe('hadith')">الأربعون النووية</button>
+            <button class="button" onclick="playAdhan()">تشغيل الأذان</button>
+        </div>
+
+        <!-- الشاشة التي تعرض المحتوى عند الضغط على الأزرار -->
+        <div id="screen">
+            <div id="stitle"></div>
+            <div id="sbody"></div>
+            <button class="button" onclick="closeMe()">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- إضافة صوت الأذان -->
+    <audio id="adhan-audio">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav"> <!-- تغيير الرابط إلى صوت الأذان الفعلي -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // بيانات أوقات الصلاة والإمساكية
+        const dataStore = {
+            imsaqiya: {
+                city: "مكة المكرمة",
+                times: [
+                    { day: "الاثنين", fajr: "5:00", maghrib: "6:30" },
+                    { day: "الثلاثاء", fajr: "5:01", maghrib: "6:31" }
+                ]
+            },
+            morning: [
+                { t: "سبحان الله وبحمده", n: 100 },
+                { t: "استغفر الله", n: 100 },
+                { t: "اللهم إني أسالك العافية", n: 10 },
+                { t: "اللهم صل وسلم على سيدنا محمد", n: 100 }
+            ],
+            evening: [
+                { t: "اللهم أجرني من النار", n: 100 },
+                { t: "اللهم اهدني واهد بي", n: 50 },
+                { t: "بسم الله الرحمن الرحيم", n: 50 }
+            ],
+            sleep: [
+                { t: "باسمك اللهم أموت وأحيا", n: 3 },
+                { t: "اللهم قني عذابك يوم تبعث عبادك", n: 3 }
+            ],
+            hadith: [
+                { t: "حديث 1: إنما الأعمال بالنيات", n: 1 },
+                { t: "حديث 2: من لا يشكر الناس لا يشكر الله", n: 1 },
+                { t: "حديث 3: من لا يحب لأخيه ما يحب لنفسه فهو ليس منا", n: 1 },
+                { t: "حديث 4: المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف", n: 1 },
+                { t: "حديث 5: لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه", n: 1 }
+            ]
+        };
+
+        function openMe(type) {
+            const body = document.getElementById('sbody');
+            const screen = document.getElementById('screen');
+            const title = document.getElementById('stitle');
+            screen.style.display = 'block';
+            body.innerHTML = '';
+
+            if (type === 'quran') {
+                title.innerText = "القرآن الكريم";
+                body.innerHTML = '<iframe src="https://quran.com/1?translations=161" style="width:100%; height:100%; border:none;"></iframe>';
+            } else if (type === 'imsaqiya') {
+                title.innerText = "الإمساكية ومواقيت الآذان";
+                let table = `<h3>توقيت مدينة ${dataStore.imsaqiya.city}</h3><table><tr><th>اليوم</th><th>الفجر</th><th>المغرب</th></tr>`;
+                dataStore.imsaqiya.times.forEach(t => {
+                    table += `<tr><td>${t.day}</td><td>${t.fajr}</td><td style="color:var(--gold); font-weight:bold;">${t.maghrib}</td></tr>`;
+                });
+                table += `</table><p>ملاحظة: الآذان يرفع حسب توقيت هاتفك المحلي.</p>`;
+                body.innerHTML = table;
+            } else {
+                const titles = {morning: 'أذكار الصباح', evening: 'أذكار المساء', sleep: 'أذكار النوم', hadith: 'الأربعون النووية (50)'};
+                title.innerText = titles[type];
+                dataStore[type].forEach((item, i) => {
+                    body.innerHTML += `
+                        <div class="item-card">
+                            <div>${item.t}</div>
+                            <div class="count-row">
+                                <button class="tap-btn" onclick="cnt('${type}${i}', ${item.n})">سبّح</button>
                                 <span class="count-val" id="c${type}${i}">0 / ${item.n}</span>
+                            </div>
+                        </div>`;
+                });
+            }
+        }
+
+        function cnt(id, max) {
+            let el = document.getElementById('c' + id);
+            let c = parseInt(el.innerText.split(' / ')[0]);       <span class="count-val" id="c${type}${i}">0 / ${item.n}</span>
                             </div>
                         </div>`;
                 });
