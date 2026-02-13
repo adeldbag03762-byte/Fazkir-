@@ -7,37 +7,99 @@
     <style>
         body {
             margin: 0; padding: 0;
-            background: url('https://raw.githubusercontent.com/abomalik/assets/main/mosque_bg.jpg') no-repeat center center fixed;
-            background-size: cover; font-family: Arial, sans-serif; color: white; text-align: center;
+            background: #000 url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1000') no-repeat center center fixed;
+            background-size: cover; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f4f4f4; text-align: center;
         }
-        .overlay { background: rgba(0,0,0,0.8); min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .overlay {
+            background: rgba(0, 0, 0, 0.75);
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        #reminder-bar {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(212, 175, 55, 0.9); color: black;
+            padding: 10px 0; font-weight: bold; z-index: 1000;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px; border-radius: 25px; border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(10px); width: 100%; max-width: 400px; margin-top: 50px;
+        }
+        .prayer-table {
+            width: 100%; margin: 20px 0; border-collapse: collapse;
+            background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden;
+        }
+        .prayer-table td { padding: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+        .prayer-table tr:last-child td { border-bottom: none; }
+        .prayer-name { color: #d4af37; font-weight: bold; text-align: right; }
+        .prayer-time { text-align: left; font-family: monospace; font-size: 1.2em; }
+        
         .btn {
-            display: block; width: 90%; max-width: 400px; margin: 15px auto; padding: 18px;
-            background: linear-gradient(to right, #d4af37, #f9df7b);
-            color: black; text-decoration: none; border-radius: 15px;
-            font-weight: bold; font-size: 1.1em; border: none; cursor: pointer;
+            display: block; width: 100%; margin: 10px 0; padding: 15px;
+            background: linear-gradient(145deg, #d4af37, #aa8a2e);
+            color: #000; text-decoration: none; border-radius: 12px;
+            font-weight: bold; border: none; cursor: pointer;
         }
-        #hadithBox { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: none; margin-top: 15px; text-align: right; border: 1px solid gold; overflow-y: auto; max-height: 250px; }
+        .footer { position: fixed; bottom: 10px; left: 10px; font-size: 0.75em; color: rgba(255, 255, 255, 0.4); }
     </style>
 </head>
 <body>
+
+    <div id="reminder-bar">جاري التحميل...</div>
+
     <div class="overlay">
-        <h1 style="color: #d4af37;">فذكّر</h1>
-        <p>جامع خالد بن الوليد</p>
-        <button class="btn" onclick="document.getElementById('azan').play()">📢 رفع الأذان الآن</button>
-        <a href="https://quran.com/1?translations=131" class="btn">📖 القرآن الكريم (مع التفسير)</a>
-        <a href="https://qiblafinder.withgoogle.com/" class="btn">🧭 اتجاه القبلة (البوصلة)</a>
-        <button class="btn" onclick="toggleHadith()">📜 الأربعين النووية</button>
-        <div id="hadithBox">
-            <h3 style="text-align:center;">الحديث الأول</h3>
-            <p>عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: "إنما الأعمال بالنيات..."</p>
+        <div class="container">
+            <h2 style="color:#d4af37; margin:0;">فذكّر</h2>
+            <div style="font-size:0.9em; color:#ccc; margin-bottom:15px;">جامع خالد بن الوليد - حلب</div>
+            
+            <table class="prayer-table" id="prayerTable">
+                <tr><td class="prayer-name">الفجر</td><td class="prayer-time" id="fajr">-</td></tr>
+                <tr><td class="prayer-name">الظهر</td><td class="prayer-time" id="dhuhr">-</td></tr>
+                <tr><td class="prayer-name">العصر</td><td class="prayer-time" id="asr">-</td></tr>
+                <tr><td class="prayer-name">المغرب</td><td class="prayer-time" id="maghrib">-</td></tr>
+                <tr><td class="prayer-name">العشاء</td><td class="prayer-time" id="isha">-</td></tr>
+            </table>
+
+            <button class="btn" onclick="playAzan()">📢 رفع الأذان الآن</button>
+            <a href="https://quran.com/1?translations=131" class="btn">📖 القرآن والتفسير</a>
+            
+            <audio id="myAzan">
+                <source src="https://server8.mp3quran.net/azan/Azan-1.mp3" type="audio/mpeg">
+            </audio>
         </div>
-        <audio id="azan" src="https://www.islamcan.com/common/azan/azan1.mp3"></audio>
+        
+        <div class="footer">إعداد: عبد الوكيل الحلبي</div>
     </div>
+
     <script>
-        function toggleHadith() {
-            var box = document.getElementById('hadithBox');
-            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        // 1. الأذكار المتحركة
+        const reminders = ["صلى على النبي ﷺ", "استغفر الله العظيم", "سبحان الله وبحمده", "لا حول ولا قوة إلا بالله"];
+        let rIndex = 0;
+        setInterval(() => {
+            document.getElementById('reminder-bar').innerText = reminders[rIndex];
+            rIndex = (rIndex + 1) % reminders.length;
+        }, 5000);
+
+        // 2. جلب مواقيت الصلاة لمدينة حلب
+        async function getPrayers() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aleppo&country=Syria&method=4');
+                const data = await res.json();
+                const times = data.data.timings;
+                document.getElementById('fajr').innerText = times.Fajr;
+                document.getElementById('dhuhr').innerText = times.Dhuhr;
+                document.getElementById('asr').innerText = times.Asr;
+                document.getElementById('maghrib').innerText = times.Maghrib;
+                document.getElementById('isha').innerText = times.Isha;
+            } catch (err) {
+                console.log("خطأ في جلب المواقيت");
+            }
+        }
+        getPrayers();
+
+        function playAzan() {
+            document.getElementById('myAzan').play().catch(() => alert("ارفع الصوت"));
         }
     </script>
 </body>
