@@ -3,150 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق فذكّر - الإصدار الفخم</title>
+    <title>تطبيق فذكّر - الإصدار الشامل</title>
     <style>
         :root {
-            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f9df7b 50%, #aa8a2e 100%);
-            --dark-bg: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.05);
+            --gold: #d4af37;
+            --dark: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.07);
         }
         body {
-            margin: 0; padding: 0;
-            background: var(--dark-bg);
-            background-image: radial-gradient(circle at top right, #1a1a1a, #000);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #fff; text-align: center;
+            margin: 0; background: var(--dark); color: #fff;
+            font-family: 'Segoe UI', sans-serif; text-align: center;
+            background-image: radial-gradient(circle at top, #1a1a1a, #000);
         }
-        .overlay { padding: 20px; min-height: 100vh; box-sizing: border-box; }
-        #reminder-bar {
-            position: fixed; top: 0; width: 100%;
-            background: var(--gold-gradient); color: #000;
-            padding: 12px 0; font-weight: 700; font-size: 1.1em;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 1000;
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .card {
+            background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 30px; padding: 20px; backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-top: 50px;
         }
-        .main-card {
-            background: var(--glass);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 30px 20px;
-            max-width: 450px; margin: 70px auto 20px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-        h1 {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 3em; margin: 0; font-weight: 900;
-        }
-        .city-select {
-            background: rgba(255,255,255,0.1);
-            color: #d4af37; border: 1px solid #d4af37;
-            padding: 10px 20px; border-radius: 20px;
-            margin: 20px 0; width: 80%; font-size: 1em;
-        }
-        .prayer-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; margin: 20px 0;
-        }
-        .prayer-item {
-            background: rgba(255,255,255,0.03);
-            padding: 15px 5px; border-radius: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.1);
-        }
-        .prayer-item div { color: #d4af37; font-weight: bold; font-size: 0.9em; }
-        .prayer-item span { font-size: 1.2em; font-family: monospace; }
+        h1 { background: linear-gradient(to bottom, #f9df7b, #aa8a2e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5em; margin: 10px; }
+        
+        .prayer-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .p-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1); }
+        .p-item div { color: var(--gold); font-size: 0.8em; }
+
         .btn {
-            background: var(--gold-gradient);
-            color: #000; border: none; padding: 18px;
-            border-radius: 20px; width: 100%; margin: 10px 0;
-            font-weight: 800; font-size: 1.1em; cursor: pointer;
+            background: linear-gradient(135deg, #d4af37, #aa8a2e); color: #000;
+            border: none; padding: 15px; border-radius: 15px; width: 100%;
+            margin: 8px 0; font-weight: bold; cursor: pointer; font-size: 1em;
         }
-        #display-area {
-            display: none; background: #fff; color: #222;
-            border-radius: 25px; padding: 20px; margin-top: 15px;
-            text-align: right; max-height: 300px; overflow-y: auto;
-            border: 4px solid #d4af37;
-        }
-        .footer { margin-top: 20px; font-size: 0.85em; color: #d4af37; opacity: 0.8; }
+        .compass-box { margin: 20px 0; padding: 15px; border: 1px dashed var(--gold); border-radius: 20px; }
+        #display-frame { display: none; width: 100%; height: 400px; border: 2px solid var(--gold); border-radius: 20px; margin-top: 15px; }
+        
+        #reminder-top { position: fixed; top: 0; width: 100%; background: var(--gold); color: #000; padding: 8px; font-weight: bold; z-index: 100; }
     </style>
 </head>
 <body>
 
-<div id="reminder-bar">جاري التحميل...</div>
+<div id="reminder-top">سبحان الله وبحمده</div>
 
-<div class="overlay">
-    <div class="main-card">
+<div class="container">
+    <div class="card">
         <h1>فذكّر</h1>
-        <p style="color:#aaa; margin-top:5px;">جامع خالد بن الوليد</p>
+        <p>جامع خالد بن الوليد - حلب</p>
 
-        <select class="city-select" id="citySelect" onchange="fetchPrayers()">
-            <option value="Aleppo">محافظة حلب</option>
-            <option value="Damascus">محافظة دمشق</option>
-            <option value="Homs">محافظة حمص</option>
-            <option value="Hama">محافظة حماة</option>
-            <option value="Latakia">محافظة اللاذقية</option>
-            <option value="Idlib">محافظة إدلب</option>
-        </select>
-
-        <div class="prayer-grid">
-            <div class="prayer-item"><div>الفجر</div><span id="fajr">-</span></div>
-            <div class="prayer-item"><div>الظهر</div><span id="dhuhr">-</span></div>
-            <div class="prayer-item"><div>العصر</div><span id="asr">-</span></div>
-            <div class="prayer-item"><div>المغرب</div><span id="maghrib">-</span></div>
-            <div class="prayer-item"><div>العشاء</div><span id="isha">-</span></div>
-            <div class="prayer-item" style="background:rgba(212,175,55,0.1)"><div>الشروق</div><span id="sunrise">-</span></div>
+        <div class="prayer-table" id="prayers">
+            <div class="p-item"><div>الفجر/الإمساك</div><span id="fajr">--:--</span></div>
+            <div class="p-item"><div>الظهر</div><span id="dhuhr">--:--</span></div>
+            <div class="p-item"><div>العصر</div><span id="asr">--:--</span></div>
+            <div class="p-item"><div>المغرب/الإفطار</div><span id="maghrib">--:--</span></div>
+            <div class="p-item"><div>العشاء</div><span id="isha">--:--</span></div>
+            <div class="p-item"><div>القبلة</div><span id="qibla_deg">--</span></div>
         </div>
 
-        <button class="btn" onclick="playAzan()">📢 رفع الأذان الآن</button>
-        <button class="btn" onclick="showA()">✨ أذكار الصباح والمساء</button>
-        <button class="btn" onclick="showQ()">📖 المصحف والتفسير</button>
+        <div class="compass-box">
+            🧭 <b>البوصلة:</b> وجه هاتفك للقبلة <br>
+            <small id="dir">جاري التحديد...</small>
+        </div>
+
+        <button class="btn" onclick="showContent('quran')">📖 المصحف والتفسير</button>
+        <button class="btn" onclick="showContent('azkar')">✨ أذكار الصباح والمساء</button>
+        <button class="btn" onclick="startTasbih()">📿 السبحة الإلكترونية: <span id="t-count">0</span></button>
         
-        <div id="display-area"></div>
+        <iframe id="display-frame"></iframe>
+
+        <div style="margin-top:20px; font-size:0.7em; color:var(--gold)">تصميم وتطوير: عبد الوكيل الحلبي</div>
     </div>
-    <div class="footer">إعداد وتطوير: عبد الوكيل الحلبي</div>
 </div>
 
 <script>
-    // طلب إذن الإشعارات فوراً
+    // 1. طلب إذن الإشعارات
     if ("Notification" in window) {
         Notification.requestPermission();
     }
 
-    const rems = ["اللهم صلِّ وسلم على نبينا محمد", "سبحان الله وبحمده", "أستغفر الله وأتوب إليه", "لا حول ولا قوة إلا بالله"];
-    let rIdx = 0;
-    setInterval(() => { document.getElementById('reminder-bar').innerText = rems[rIdx]; rIdx = (rIdx + 1) % rems.length; }, 5000);
-
-    async function fetchPrayers() {
-        const city = document.getElementById('citySelect').value;
+    // 2. جلب مواقيت الصلاة لسوريا (حلب كمثال)
+    async function getPrayers() {
         try {
-            const r = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Syria&method=4`);
-            const d = await r.json();
-            const t = d.data.timings;
+            const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aleppo&country=Syria&method=4');
+            const data = await res.json();
+            const t = data.data.timings;
             document.getElementById('fajr').innerText = t.Fajr;
             document.getElementById('dhuhr').innerText = t.Dhuhr;
             document.getElementById('asr').innerText = t.Asr;
             document.getElementById('maghrib').innerText = t.Maghrib;
             document.getElementById('isha').innerText = t.Isha;
-            document.getElementById('sunrise').innerText = t.Sunrise;
-        } catch(e) { console.error("Error"); }
+            document.getElementById('qibla_deg').innerText = "مكة 195°";
+        } catch (e) { console.log("خطأ في الاتصال"); }
     }
-    fetchPrayers();
+    getPrayers();
 
-    function showA() {
-        const da = document.getElementById('display-area');
-        da.innerHTML = '<h3>أذكار الصباح والمساء</h3><b>سيد الاستغفار:</b> اللهم أنت ربي لا إله إلا أنت...<br><hr><b>آية الكرسي</b>';
-        da.style.display = da.style.display === 'block' ? 'none' : 'block';
+    // 3. السبحة
+    let tCount = 0;
+    function startTasbih() {
+        tCount++;
+        document.getElementById('t-count').innerText = tCount;
+        if (window.navigator.vibrate) window.navigator.vibrate(50);
     }
-    function showQ() {
-        const da = document.getElementById('display-area');
-        da.innerHTML = '<iframe src="https://quran.com/1" style="width:100%; height:300px; border:none;"></iframe>';
-        da.style.display = 'block';
+
+    // 4. عرض المحتوى (مصحف / أذكار)
+    function showContent(type) {
+        const frame = document.getElementById('display-frame');
+        frame.style.display = 'block';
+        if (type === 'quran') {
+            frame.src = "https://quran.com/1"; // رابط المصحف مع التفسير
+        } else {
+            frame.src = "https://www.hisnmuslim.com/i/ar/1"; // رابط أذكار حصن المسلم
+        }
     }
-    function playAzan() {
-        const a = new Audio('https://server8.mp3quran.net/azan/Azan-1.mp3');
-        a.play().catch(() => alert("يرجى تفعيل الصوت"));
+
+    // 5. نظام التنبيهات التلقائي (يعمل كل فترة)
+    const thikrList = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله"];
+    setInterval(() => {
+        let randomThikr = thikrList[Math.floor(Math.random() * thikrList.length)];
+        document.getElementById('reminder-top').innerText = randomThikr;
+        
+        if (Notification.permission === "granted") {
+            new Notification("فذكّر", { body: randomThikr, icon: "https://cdn-icons-png.flaticon.com/512/2664/2664831.png" });
+        }
+    }, 1800000); // تنبيه كل 30 دقيقة
+
+    // 6. الأذان التلقائي (تجريبي)
+    function checkAzanTime() {
+        const now = new Date();
+        const currentTime = now.getHours() + ":" + now.getMinutes();
+        // هنا يتم مقارنة الوقت الحالي بأوقات الصلاة وتشغيل الصوت
+        // ملاحظة: المتصفحات تطلب ضغطة واحدة على الأقل لتفعيل الصوت آلياً
     }
+    
+    // البوصلة (تحتاج حساسات الهاتف)
+    window.addEventListener('deviceorientation', function(event) {
+        if(event.webkitCompassHeading) {
+            let heading = event.webkitCompassHeading;
+            document.getElementById('dir').innerText = "الاتجاه الحالي: " + Math.round(heading) + "°";
+        }
+    });
 </script>
 </body>
 </html>
