@@ -18,15 +18,12 @@
             color: #fff; text-align: center;
         }
         .overlay { padding: 20px; min-height: 100vh; box-sizing: border-box; }
-        
-        /* شريط التذكير العلوي الفخم */
         #reminder-bar {
             position: fixed; top: 0; width: 100%;
             background: var(--gold-gradient); color: #000;
             padding: 12px 0; font-weight: 700; font-size: 1.1em;
             box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 1000;
         }
-
         .main-card {
             background: var(--glass);
             border: 1px solid rgba(212, 175, 55, 0.3);
@@ -36,21 +33,18 @@
             max-width: 450px; margin: 70px auto 20px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
-
         h1 {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 3em; margin: 0; font-weight: 900;
         }
-
         .city-select {
             background: rgba(255,255,255,0.1);
             color: #d4af37; border: 1px solid #d4af37;
             padding: 10px 20px; border-radius: 20px;
             margin: 20px 0; width: 80%; font-size: 1em;
         }
-
         .prayer-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
             gap: 10px; margin: 20px 0;
@@ -62,34 +56,19 @@
         }
         .prayer-item div { color: #d4af37; font-weight: bold; font-size: 0.9em; }
         .prayer-item span { font-size: 1.2em; font-family: monospace; }
-
-        .masbaha-box {
-            background: linear-gradient(rgba(212, 175, 55, 0.1), transparent);
-            border-radius: 30px; padding: 20px; margin: 20px 0;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .count-display { font-size: 3.5em; font-weight: bold; color: #fff; text-shadow: 0 0 20px #d4af37; }
-
         .btn {
             background: var(--gold-gradient);
             color: #000; border: none; padding: 18px;
             border-radius: 20px; width: 100%; margin: 10px 0;
             font-weight: 800; font-size: 1.1em; cursor: pointer;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn:active { transform: scale(0.95); }
-
         #display-area {
             display: none; background: #fff; color: #222;
             border-radius: 25px; padding: 20px; margin-top: 15px;
             text-align: right; max-height: 300px; overflow-y: auto;
-            border: 4px solid #d4af37; box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+            border: 4px solid #d4af37;
         }
-
-        .footer {
-            margin-top: 20px; font-size: 0.85em; color: #d4af37;
-            opacity: 0.8; letter-spacing: 1px;
-        }
+        .footer { margin-top: 20px; font-size: 0.85em; color: #d4af37; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -119,24 +98,21 @@
             <div class="prayer-item" style="background:rgba(212,175,55,0.1)"><div>الشروق</div><span id="sunrise">-</span></div>
         </div>
 
-        <div class="masbaha-box">
-            <div class="count-display" id="counter">0</div>
-            <button class="btn" onclick="inc()" style="width:120px; padding:10px;">تسبيح</button>
-            <button class="btn" onclick="res()" style="width:80px; padding:10px; background:#fff; color:#000;">تصفير</button>
-        </div>
-
         <button class="btn" onclick="playAzan()">📢 رفع الأذان الآن</button>
         <button class="btn" onclick="showA()">✨ أذكار الصباح والمساء</button>
         <button class="btn" onclick="showQ()">📖 المصحف والتفسير</button>
-        <button class="btn" onclick="showH()">📜 الأربعين النووية</button>
-
+        
         <div id="display-area"></div>
     </div>
-
     <div class="footer">إعداد وتطوير: عبد الوكيل الحلبي</div>
 </div>
 
 <script>
+    // طلب إذن الإشعارات فوراً
+    if ("Notification" in window) {
+        Notification.requestPermission();
+    }
+
     const rems = ["اللهم صلِّ وسلم على نبينا محمد", "سبحان الله وبحمده", "أستغفر الله وأتوب إليه", "لا حول ولا قوة إلا بالله"];
     let rIdx = 0;
     setInterval(() => { document.getElementById('reminder-bar').innerText = rems[rIdx]; rIdx = (rIdx + 1) % rems.length; }, 5000);
@@ -157,13 +133,9 @@
     }
     fetchPrayers();
 
-    let count = 0;
-    function inc() { count++; document.getElementById('counter').innerText = count; }
-    function res() { count = 0; document.getElementById('counter').innerText = count; }
-
     function showA() {
         const da = document.getElementById('display-area');
-        da.innerHTML = '<h3>أذكار الصباح والمساء</h3><b>سيد الاستغفار:</b> اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك...<br><hr><b>آية الكرسي</b><br><b>المعوذات (3 مرات)</b>';
+        da.innerHTML = '<h3>أذكار الصباح والمساء</h3><b>سيد الاستغفار:</b> اللهم أنت ربي لا إله إلا أنت...<br><hr><b>آية الكرسي</b>';
         da.style.display = da.style.display === 'block' ? 'none' : 'block';
     }
     function showQ() {
@@ -171,14 +143,9 @@
         da.innerHTML = '<iframe src="https://quran.com/1" style="width:100%; height:300px; border:none;"></iframe>';
         da.style.display = 'block';
     }
-    function showH() {
-        const da = document.getElementById('display-area');
-        da.innerHTML = '<h3>الأربعين النووية</h3><b>الحديث الأول:</b> إنما الأعمال بالنيات...';
-        da.style.display = 'block';
-    }
     function playAzan() {
         const a = new Audio('https://server8.mp3quran.net/azan/Azan-1.mp3');
-        a.play().catch(() => alert("تأكد من رفع الصوت"));
+        a.play().catch(() => alert("يرجى تفعيل الصوت"));
     }
 </script>
 </body>
