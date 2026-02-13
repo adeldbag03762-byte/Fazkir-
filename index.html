@@ -6,7 +6,7 @@
     <title>تطبيق فذكّر - عبد الوكيل الحلبي</title>
     <style>
         :root { --gold: #d4af37; --dark-bg: #050505; --glass: rgba(255, 255, 255, 0.08); }
-        body { margin: 0; background: var(--dark-bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        body { margin: 0; background: var(--dark-bg); color: #fff; font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; line-height: 1.6; }
         .header { padding: 30px 20px; background: linear-gradient(to bottom, rgba(212,175,55,0.1), transparent); }
         h1 { font-size: 2.5em; color: var(--gold); margin: 0; }
         .container { padding: 0 15px 100px; max-width: 500px; margin: auto; }
@@ -16,14 +16,13 @@
         .prayer-box div { font-size: 0.7em; color: var(--gold); }
         .btn { background: linear-gradient(135deg, var(--gold), #aa8a2e); color: #000; border: none; padding: 15px; border-radius: 15px; width: 100%; margin: 8px 0; font-weight: bold; cursor: pointer; font-size: 1.1em; }
         
-        /* شاشة العرض */
         #view-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 2000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .content-area { text-align: right; line-height: 2.2; font-size: 1.4em; padding-bottom: 50px; }
+        .content-area { text-align: right; line-height: 2; font-size: 1.3em; padding-bottom: 50px; }
         .close-btn { background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .quran-verse { border-bottom: 1px solid rgba(212,175,55,0.2); padding: 15px 0; cursor: pointer; transition: 0.3s; }
-        .quran-verse:hover { background: rgba(212,175,55,0.1); color: var(--gold); }
-        .footer { text-align: center; color: var(--gold); font-weight: bold; padding: 20px; border-top: 1px solid rgba(212,175,55,0.1); }
-        .audio-info { font-size: 0.6em; color: var(--gold); display: block; margin-top: 5px; }
+        .quran-item { border-bottom: 1px solid rgba(212,175,55,0.2); padding: 15px 0; cursor: pointer; }
+        .tafseer-text { font-size: 0.8em; color: #aaa; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin-top: 10px; display: none; }
+        .azkar-text { background: rgba(212,175,55,0.05); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 4px solid var(--gold); }
+        .footer { text-align: center; color: var(--gold); font-weight: bold; padding: 20px; border-top: 1px solid rgba(212,175,55,0.1); font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -46,9 +45,9 @@
         </div>
     </div>
 
-    <button class="btn" onclick="loadQuran()">📖 المصحف الناطق</button>
+    <button class="btn" onclick="loadQuran()">📖 المصحف والتفسير</button>
+    <button class="btn" onclick="loadAzkar()">✨ أذكار الصباح والمساء (كاملة)</button>
     <button class="btn" onclick="loadHadith()">📜 الأربعين النووية</button>
-    <button class="btn" onclick="loadAzkar()">✨ أذكار المسلم</button>
     <button class="btn" onclick="loadTasbih()">📿 السبحة الإلكترونية</button>
     <button class="btn" onclick="playAzan()" style="background: #222; color: var(--gold); border: 1px solid var(--gold);">📢 رفع الأذان الآن</button>
 
@@ -57,12 +56,9 @@
 
 <div id="view-screen">
     <button class="close-btn" onclick="closeScreen()">إغلاق ✕</button>
-    <div id="inner-title" style="color:var(--gold); font-size:1.5em; margin-bottom:10px;"></div>
-    <div style="color:#aaa; font-size:0.8em; margin-bottom:20px;">(اضغط على الآية لسماع تلاوتها)</div>
+    <div id="inner-title" style="color:var(--gold); font-size:1.5em; margin-bottom:20px;"></div>
     <div id="content-body" class="content-area"></div>
 </div>
-
-<audio id="quranAudio"></audio>
 
 <script>
     // جلب المواقيت
@@ -80,57 +76,65 @@
     }
     getTimes();
 
-    function closeScreen() { 
-        document.getElementById('view-screen').style.display = 'none'; 
-        document.getElementById('quranAudio').pause();
-    }
+    function closeScreen() { document.getElementById('view-screen').style.display = 'none'; }
 
-    // المصحف الناطق
+    // المصحف مع تفسير ابن كثير
     async function loadQuran() {
         const screen = document.getElementById('view-screen');
         const body = document.getElementById('content-body');
-        document.getElementById('inner-title').innerText = "سورة الفاتحة";
+        document.getElementById('inner-title').innerText = "سورة الفاتحة (اضغط للتمفسير)";
         screen.style.display = 'block';
-        body.innerHTML = "جاري تحميل الآيات...";
+        body.innerHTML = "جاري التحميل...";
         
         try {
-            // جلب النص والصوت (آية آية)
-            const res = await fetch('https://api.alquran.cloud/v1/surah/1/ar.alafasy');
+            const res = await fetch('https://api.alquran.cloud/v1/surah/1/editions/quran-simple,ar.jalalayn'); // استخدمنا الجلالين لسرعة التحميل وتوفره برمجياً
             const data = await res.json();
             let html = "";
-            data.data.ayahs.forEach(ayah => {
+            const textEdition = data.data[0].ayahs;
+            const tafseerEdition = data.data[1].ayahs;
+
+            textEdition.forEach((ayah, index) => {
                 html += `
-                    <div class="quran-verse" onclick="playAyah('${ayah.audio}')">
+                    <div class="quran-item" onclick="toggleTafseer(${index})">
                         ${ayah.text} ﴿${ayah.numberInSurah}﴾
-                        <span class="audio-info">▶ اضغط للاستماع</span>
+                        <div id="tafseer-${index}" class="tafseer-text"><b>التفسير:</b> ${tafseerEdition[index].text}</div>
                     </div>`;
             });
             body.innerHTML = html;
-        } catch(e) { body.innerHTML = "تأكد من الاتصال بالإنترنت لتشغيل المصحف الناطق."; }
+        } catch(e) { body.innerHTML = "تأكد من الاتصال بالإنترنت."; }
     }
 
-    function playAyah(audioUrl) {
-        const player = document.getElementById('quranAudio');
-        player.src = audioUrl;
-        player.play();
+    function toggleTafseer(id) {
+        const el = document.getElementById(`tafseer-${id}`);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // أذكار الصباح والمساء كاملة
+    function loadAzkar() {
+        document.getElementById('view-screen').style.display = 'block';
+        document.getElementById('inner-title').innerText = "أذكار الصباح والمساء";
+        document.getElementById('content-body').innerHTML = `
+            <div class="azkar-text"><b>آية الكرسي:</b> {اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...}</div>
+            <div class="azkar-text"><b>المعوذات:</b> سورة الإخلاص، الفلق، والناس (3 مرات).</div>
+            <div class="azkar-text">أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير.</div>
+            <div class="azkar-text">اللهم بك أصبحنا، وبك أمسينا، وبك نحيا، وبك نموت، وإليك النشور.</div>
+            <div class="azkar-text">اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء بذنبي فاغفر لي فإنه لا يغفر الذنوب إلا أنت.</div>
+            <div class="azkar-text">بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم (3 مرات).</div>
+            <div class="azkar-text">رضيت بالله رباً، وبالإسلام ديناً، وبمحمد ﷺ نبياً (3 مرات).</div>
+            <div class="azkar-text">يا حي يا قيوم برحمتك أستغيث أصلح لي شأني كله ولا تكلني إلى نفسي طرفة عين.</div>
+        `;
     }
 
     function loadHadith() {
         document.getElementById('view-screen').style.display = 'block';
         document.getElementById('inner-title').innerText = "الأربعين النووية";
-        document.getElementById('content-body').innerHTML = `<b>الحديث الأول:</b> عن عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله ﷺ يقول: (إنما الأعمال بالنيات...) <hr> <b>الحديث الثاني:</b> بينما نحن جلوس عند رسول الله ﷺ...`;
-    }
-
-    function loadAzkar() {
-        document.getElementById('view-screen').style.display = 'block';
-        document.getElementById('inner-title').innerText = "أذكار الصباح والمساء";
-        document.getElementById('content-body').innerHTML = `• آية الكرسي <br> • رضيت بالله رباً وبالإسلام ديناً وبمحمد ﷺ نبياً. <br> • أصبحنا وأصبح الملك لله.`;
+        document.getElementById('content-body').innerHTML = `<div class="azkar-text"><b>الحديث الأول:</b> عن عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله ﷺ يقول: (إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى...)</div>`;
     }
 
     let c = 0;
     function loadTasbih() {
         document.getElementById('view-screen').style.display = 'block';
-        document.getElementById('inner-title').innerText = "السبحة الإلكترونية";
+        document.getElementById('inner-title').innerText = "السبحة";
         document.getElementById('content-body').innerHTML = `<div style="text-align:center;"><div style="font-size:5em; color:var(--gold);" id="t-val">${c}</div><button class="btn" onclick="tClick()">تسبيح</button><button class="btn" style="background:#444; color:#fff;" onclick="c=0; document.getElementById('t-val').innerText=0">تصفير</button></div>`;
     }
     function tClick() { c++; document.getElementById('t-val').innerText = c; if(navigator.vibrate) navigator.vibrate(50); }
