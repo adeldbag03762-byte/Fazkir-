@@ -6,45 +6,63 @@
     <title>فذكّر - عبد الوكيل الحلبي</title>
     <style>
         :root { --gold: #d4af37; --bg: #050505; }
+        
         body {
-            margin: 0; background: var(--bg); color: #fff;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-image: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            /* إضافة خلفية المسجد النبوي مع طبقة تعتيم لضمان وضوح الخط */
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff; font-family: 'Segoe UI', Tahoma, sans-serif;
             min-height: 100vh; text-align: center;
         }
-        .wrapper { max-width: 480px; margin: auto; padding: 20px; }
-        h1 { font-size: 3.5em; color: var(--gold); margin: 30px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        
-        .prayer-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 30px; padding: 20px; backdrop-filter: blur(10px); margin-bottom: 25px;
-        }
-        .p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .p-item { background: rgba(0,0,0,0.4); padding: 12px 5px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.1); }
-        .p-item div { font-size: 0.7em; color: var(--gold); }
-        .p-item span { font-weight: bold; font-family: monospace; }
 
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .m-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2);
-            padding: 25px 10px; border-radius: 20px; cursor: pointer; transition: 0.3s;
+        .wrapper { max-width: 500px; margin: auto; padding: 25px; }
+
+        h1 { font-size: 4em; color: var(--gold); margin: 40px 0 20px; text-shadow: 2px 4px 10px rgba(0,0,0,0.7); font-weight: 900; }
+        
+        /* بطاقة المواقيت */
+        .prayer-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 25px; padding: 20px; backdrop-filter: blur(12px); margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .m-btn:hover { background: rgba(212,175,55,0.1); transform: translateY(-3px); }
-        .m-btn b { display: block; margin-top: 10px; color: #eee; font-size: 0.9em; }
+        .p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .p-item { background: rgba(0,0,0,0.5); padding: 15px 5px; border-radius: 18px; border: 1px solid rgba(212,175,55,0.2); transition: 0.3s; }
+        .p-item:hover { border-color: var(--gold); transform: scale(1.05); }
+        .p-item div { font-size: 0.8em; color: var(--gold); margin-bottom: 5px; }
+        .p-item span { font-weight: bold; font-family: 'Courier New', monospace; font-size: 1.2em; }
+
+        /* القائمة */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .m-btn {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px 10px; border-radius: 25px; cursor: pointer; transition: 0.4s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .m-btn:hover { background: rgba(212,175,55,0.15); border-color: var(--gold); transform: translateY(-5px); }
+        .m-btn i { font-size: 2.5em; margin-bottom: 15px; }
+        .m-btn b { font-size: 1.1em; color: #f0f0f0; }
         
         .full-btn {
             grid-column: span 2; background: linear-gradient(135deg, var(--gold), #aa8a2e);
-            color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 10px;
+            color: #000; border: none; padding: 22px; border-radius: 20px; font-weight: 900; 
+            font-size: 1.3em; cursor: pointer; margin-top: 15px; box-shadow: 0 10px 25px rgba(212,175,55,0.4);
         }
 
-        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        .back { background: var(--gold); border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; margin-bottom: 20px; cursor: pointer; color: #000; }
-        .content { text-align: right; line-height: 2; font-size: 1.1em; padding-bottom: 50px; }
-        .item-box { background: rgba(212,175,55,0.05); padding: 15px; border-radius: 15px; margin-bottom: 15px; border-right: 4px solid var(--gold); }
-        .footer { margin-top: 50px; padding: 20px; color: var(--gold); border-top: 1px solid rgba(212,175,55,0.1); font-weight: bold; }
+        /* شاشات العرض المنبثقة */
+        #screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; padding: 30px; box-sizing: border-box; overflow-y: auto; }
+        .back { background: var(--gold); border: none; padding: 12px 35px; border-radius: 15px; font-weight: bold; margin-bottom: 25px; cursor: pointer; color: #000; font-size: 1em; }
+        .content { text-align: right; line-height: 2.2; font-size: 1.3em; }
+        .item-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; margin-bottom: 20px; border-right: 5px solid var(--gold); }
         
-        /* تصميم المسبحة داخل الأذكار */
-        .tasbih-area { background: linear-gradient(to left, #111, #222); padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 25px; border: 1px solid var(--gold); }
+        .tasbih-box { background: linear-gradient(145deg, #111, #222); padding: 30px; border-radius: 30px; text-align: center; margin-bottom: 30px; border: 2px solid var(--gold); }
+        
+        .footer { margin-top: 60px; padding: 30px; color: var(--gold); border-top: 1px solid rgba(212,175,55,0.2); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -74,13 +92,12 @@
 </div>
 
 <div id="screen">
-    <button class="back" onclick="closeScreen()">رجوع ✕</button>
-    <div id="s-title" style="color:var(--gold); font-size:1.8em; margin-bottom:20px; text-align:center;"></div>
+    <button class="back" onclick="closeScreen()">رجوع لـ فذكّر ✕</button>
+    <div id="s-title" style="color:var(--gold); font-size:2.2em; margin-bottom:30px; text-align:center; font-weight:bold;"></div>
     <div id="s-body" class="content"></div>
 </div>
 
 <script>
-    // جلب مواقيت الصلاة
     async function getPrays() {
         try {
             const r = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Aleppo&country=Syria&method=4');
@@ -98,23 +115,22 @@
     let audioObj = new Audio();
     function closeScreen() { document.getElementById('screen').style.display = 'none'; audioObj.pause(); }
 
-    // 1. المصحف الصوتي والتفسير
     async function openQuran() {
         const s = document.getElementById('screen');
         const b = document.getElementById('s-body');
         document.getElementById('s-title').innerText = "سورة الفاتحة";
         s.style.display = 'block';
-        b.innerHTML = "<p style='text-align:center'>جاري التحميل...</p>";
+        b.innerHTML = "<p style='text-align:center; color:var(--gold)'>جاري تحميل المصحف الصوتي...</p>";
         
         try {
             const res = await fetch('https://api.alquran.cloud/v1/surah/1/editions/quran-simple,ar.jalalayn,ar.alafasy');
             const data = await res.json();
             let h = "";
             data.data[0].ayahs.forEach((a, i) => {
-                h += `<div class="item-box" onclick="playAyah('${data.data[2].ayahs[i].audio}')">
-                        <div style="color:var(--gold); font-size:1.2em;">${a.text} ﴿${a.numberInSurah}﴾</div>
-                        <div style="font-size:0.85em; color:#bbb; margin-top:10px;"><b>التفسير:</b> ${data.data[1].ayahs[i].text}</div>
-                        <div style="text-align:left; color:var(--gold); font-size:0.7em; margin-top:5px;">▶ اضغط للاستماع</div>
+                h += `<div class="item-box" onclick="playAyah('${data.data[2].ayahs[i].audio}')" style="cursor:pointer">
+                        <div style="color:var(--gold); font-size:1.4em; margin-bottom:10px;">${a.text} ﴿${a.numberInSurah}﴾</div>
+                        <div style="font-size:0.9em; color:#ddd; background:rgba(0,0,0,0.3); padding:10px; border-radius:10px;"><b>التفسير:</b> ${data.data[1].ayahs[i].text}</div>
+                        <div style="text-align:left; color:var(--gold); font-size:0.8em; margin-top:10px;">▶ اضغط للاستماع بصوت العفاسي</div>
                       </div>`;
             });
             b.innerHTML = h;
@@ -123,47 +139,48 @@
 
     function playAyah(url) { audioObj.src = url; audioObj.play(); }
 
-    // 2. الأذكار مع المسبحة المدمجة
     let count = 0;
     function openAzkar() {
         document.getElementById('screen').style.display = 'block';
-        document.getElementById('s-title').innerText = "الأذكار والمسبحة";
+        document.getElementById('s-title').innerText = "حصن المسلم والمسبحة";
         document.getElementById('s-body').innerHTML = `
-            <div class="tasbih-area">
-                <div style="color:var(--gold); font-weight:bold;">المسبحة الإلكترونية</div>
-                <div id="v" style="font-size:4.5em; color:var(--gold); margin:10px 0;">${count}</div>
-                <button onclick="hit()" style="background:var(--gold); border:none; padding:12px 40px; border-radius:15px; font-weight:bold; cursor:pointer; font-size:1.1em;">سبّح</button>
-                <div onclick="count=0; document.getElementById('v').innerText=0" style="color:#666; font-size:0.8em; margin-top:15px; cursor:pointer;">إعادة ضبط</div>
+            <div class="tasbih-box">
+                <div style="color:var(--gold); font-size:1.2em; font-weight:bold;">المسبحة الإلكترونية</div>
+                <div id="v" style="font-size:6em; color:var(--gold); margin:15px 0; font-family:serif;">${count}</div>
+                <button onclick="hit()" style="background:var(--gold); border:none; padding:15px 60px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:1.4em; box-shadow:0 5px 15px rgba(212,175,55,0.4);">سبّح</button>
+                <div onclick="count=0; document.getElementById('v').innerText=0" style="color:#888; font-size:0.9em; margin-top:20px; cursor:pointer; text-decoration:underline;">تصفير العداد</div>
             </div>
-            <div class="item-box"><b>سيد الاستغفار:</b><br>اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء بذنبي فاغفر لي فإنه لا يغفر الذنوب إلا أنت.</div>
-            <div class="item-box"><b>تحصين:</b><br>بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم (3 مرات).</div>
-            <div class="item-box"><b>الرضا:</b><br>رضيت بالله رباً، وبالإسلام ديناً، وبمحمد ﷺ نبياً (3 مرات).</div>
-            <div class="item-box"><b>آية الكرسي:</b><br>{اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ...}</div>
+            <div class="item-box"><b>أذكار الصباح (1):</b><br>أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير.</div>
+            <div class="item-box"><b>سيد الاستغفار:</b><br>اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت.</div>
+            <div class="item-box"><b>دعاء التحصين:</b><br>بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم (3 مرات).</div>
+            <div class="item-box"><b>آية الكرسي:</b><br>{اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...}</div>
         `;
     }
-    function hit() { count++; document.getElementById('v').innerText = count; if(navigator.vibrate) navigator.vibrate(50); }
+    function hit() { count++; document.getElementById('v').innerText = count; if(navigator.vibrate) navigator.vibrate(60); }
 
-    // 3. الأربعين النووية (نصوص كاملة)
     function openHadith() {
         document.getElementById('screen').style.display = 'block';
-        document.getElementById('s-title').innerText = "الأربعين النووية";
+        document.getElementById('s-title').innerText = "من الأربعين النووية";
         document.getElementById('s-body').innerHTML = `
             <div class="item-box">
-                <b>الحديث الأول:</b><br>
-                عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله ﷺ يقول: "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه".
+                <b style="color:var(--gold)">الحديث الأول:</b><br>
+                عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله ﷺ يقول: <b>"إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى..."</b>
             </div>
             <div class="item-box">
-                <b>الحديث الثاني:</b><br>
-                عن عمر رضي الله عنه أيضاً قال: "بينما نحن جلوس عند رسول الله ﷺ ذات يوم، إذ طلع علينا رجل شديد بياض الثياب، شديد سواد الشعر، لا يُرى عليه أثر السفر، ولا يعرفه منا أحد..." (حديث جبريل الطويل).
+                <b style="color:var(--gold)">الحديث الثاني:</b><br>
+                عن عمر رضي الله عنه أيضاً قال: "بينما نحن جلوس عند رسول الله ﷺ ذات يوم، إذ طلع علينا رجل شديد بياض الثياب، شديد سواد الشعر..."
+            </div>
+            <div class="item-box">
+                <b style="color:var(--gold)">الحديث الثالث:</b><br>
+                عن أبي عبد الرحمن عبد الله بن عمر رضي الله عنهما قال: سمعت رسول الله ﷺ يقول: <b>"بني الإسلام على خمس: شهادة أن لا إله إلا الله..."</b>
             </div>
         `;
     }
 
-    // 4. رفع الأذان
     function playAzanNow() {
         audioObj.src = 'https://server8.mp3quran.net/azan/Azan-1.mp3';
-        audioObj.play();
-        alert("بدأ صوت الأذان الآن..");
+        audioObj.play().catch(e => alert("يرجى الضغط مرة أخرى لتفعيل الصوت"));
+        alert("الله أكبر.. بدأ صوت الأذان");
     }
 </script>
 </body>
