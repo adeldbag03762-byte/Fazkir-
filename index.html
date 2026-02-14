@@ -11,10 +11,9 @@
             direction: rtl;
             background-color: #f4f4f9;
             color: #333;
-            padding: 0;
             margin: 0;
+            padding: 0;
             text-align: center;
-            height: 100vh;
         }
 
         /* الخلفية */
@@ -33,7 +32,6 @@
 
         .container {
             background-color: rgba(255, 255, 255, 0.8);
-            margin: 0;
             padding: 20px;
             border-radius: 10px;
             width: 90%;
@@ -48,10 +46,11 @@
         }
 
         .name {
-            font-size: 28px;
+            font-size: 32px;
             color: #8e44ad;
             margin-top: 20px;
             font-family: 'Georgia', serif;
+            font-weight: bold;
         }
 
         .button {
@@ -76,27 +75,32 @@
             margin-top: 50px;
         }
 
-        /* قائمة الأذكار */
-        .azkar-list {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px;
+        /* الأقسام */
+        .section {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .azkar-list li {
-            padding: 8px;
-            background-color: #ecf0f1;
+        .section h3 {
+            color: #2980b9;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .section ul li {
+            background-color: #ffffff;
+            padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
             font-size: 18px;
-        }
-
-        /* تأثيرات عرض المحتوى */
-        .content-box {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            margin: 20px;
-            border-radius: 10px;
         }
 
     </style>
@@ -106,7 +110,7 @@
     <div class="background"></div> <!-- خلفية إسلامية -->
 
     <div class="container">
-        <h1>مرحباً بك في برنامج فذكر</h1>
+        <h1>برنامج فذكر</h1>
         <h2>خدمات إسلامية مميزة</h2>
 
         <div class="name">
@@ -114,9 +118,9 @@
         </div>
 
         <!-- أذكار الصباح -->
-        <div class="content-box">
-            <h2>أذكار الصباح</h2>
-            <ul class="azkar-list">
+        <div class="section">
+            <h3>أذكار الصباح</h3>
+            <ul>
                 <li>سبحان الله وبحمده</li>
                 <li>استغفر الله</li>
                 <li>اللهم إني أسالك العافية</li>
@@ -125,19 +129,20 @@
         </div>
 
         <!-- أذكار المساء -->
-        <div class="content-box">
-            <h2>أذكار المساء</h2>
-            <ul class="azkar-list">
+        <div class="section">
+            <h3>أذكار المساء</h3>
+            <ul>
                 <li>اللهم أجرني من النار</li>
                 <li>اللهم اهدني واهد بي</li>
                 <li>بسم الله الرحمن الرحيم</li>
+                <li>اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة</li>
             </ul>
         </div>
 
         <!-- أذكار النوم -->
-        <div class="content-box">
-            <h2>أذكار النوم</h2>
-            <ul class="azkar-list">
+        <div class="section">
+            <h3>أذكار النوم</h3>
+            <ul>
                 <li>باسمك اللهم أموت وأحيا</li>
                 <li>اللهم قني عذابك يوم تبعث عبادك</li>
                 <li>اللهم إني أسألك حسن الخاتمة</li>
@@ -145,24 +150,24 @@
         </div>
 
         <!-- إمساكية رمضان -->
-        <div class="content-box">
-            <h2>إمساكية رمضان</h2>
+        <div class="section">
+            <h3>إمساكية رمضان</h3>
             <p>مواعيد الإفطار والسحور لشهر رمضان الكريم.</p>
             <!-- يمكنك إضافة جدول إمساكية رمضان هنا -->
         </div>
 
         <!-- الأحاديث الأربعين النووية -->
-        <div class="content-box">
-            <h2>الأربعون النووية</h2>
+        <div class="section">
+            <h3>الأربعون النووية</h3>
             <p>أحاديث من الأربعين النووية مع تفسير مبسط.</p>
             <!-- يمكنك إضافة الأحاديث هنا -->
         </div>
 
         <!-- القرآن الكريم مع التفسير -->
-        <div class="content-box">
-            <h2>المصحف مع التفسير</h2>
+        <div class="section">
+            <h3>المصحف مع التفسير</h3>
             <p>عرض القرآن الكريم مع التفسير.</p>
-            <!-- يمكنك إضافة Iframe للمصحف هنا -->
+            <iframe src="https://quran.com/1?translations=161" style="width:100%; height:400px; border:none;"></iframe>
         </div>
 
         <button class="button" onclick="alert('أهلاً بك في برنامج فذكر')">ابدأ الآن</button>
