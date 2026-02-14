@@ -8,17 +8,32 @@
         /* إعدادات التنسيق الأساسية */
         body {
             font-family: 'Arial', sans-serif;
+            direction: rtl;
             background-color: #f4f4f9;
             color: #333;
             padding: 0;
             margin: 0;
             text-align: center;
-            direction: rtl;
+            height: 100vh;
         }
 
-        /* الخلفية */
+        /* الخلفية الإسلامية الأنيقة */
+        .background {
+            background-image: url('https://via.placeholder.com/1500x800/cccccc?text=%D8%AE%D9%84%D9%81%D9%8A%D8%A9+%D8%A5%D8%B3%D9%84%D8%A7%D9%85%D9%8A%D8%A9');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            filter: blur(5px);
+        }
+
+        /* تنسيق الواجهة */
         .container {
-            background-color: #ecf0f1;
+            background-color: rgba(255, 255, 255, 0.8);
             margin: 0;
             padding: 20px;
             border-radius: 10px;
@@ -51,7 +66,6 @@
             margin-bottom: 40px;
         }
 
-        /* تأثير زر */
         .button {
             padding: 10px 20px;
             background-color: #2980b9;
@@ -96,16 +110,33 @@
             }
         }
 
+        /* تنسيق الإشعارات */
+        #notification {
+            display: none;
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            z-index: 1000;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="header fade-in">
-        <h1>مرحباً بك في برنامج فذكر</h1>
-        <h2>خدمات إسلامية مميزة</h2>
-    </div>
-
+    <div class="background"></div> <!-- خلفية إسلامية -->
+    
     <div class="container">
+        <div class="header fade-in">
+            <h1>مرحباً بك في برنامج فذكر</h1>
+            <h2>خدمات إسلامية مميزة</h2>
+        </div>
+
         <h1>السلام عليكم،</h1>
         <h2>إسمك في البرنامج:</h2>
         <div class="name">
@@ -115,9 +146,55 @@
         <button class="button" onclick="alert('أهلاً بك في برنامج فذكر')">ابدأ الآن</button>
     </div>
 
+    <div id="notification"></div> <!-- إشعار الأذكار -->
+
     <div class="footer">
         <p>جميع الحقوق محفوظة © 2026</p>
     </div>
+
+    <script>
+        // بيانات الأذكار
+        const azkar = {
+            morning: [
+                { t: "سبحان الله وبحمده", n: 100 },
+                { t: "استغفر الله", n: 100 },
+                { t: "اللهم إني أسالك العافية", n: 10 },
+                { t: "اللهم صل وسلم على سيدنا محمد", n: 100 },
+                { t: "أعوذ بالله من الشيطان الرجيم", n: 10 }
+            ],
+            evening: [
+                { t: "اللهم أجرني من النار", n: 100 },
+                { t: "اللهم اهدني واهد بي", n: 50 },
+                { t: "بسم الله الرحمن الرحيم", n: 50 },
+                { t: "اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة", n: 10 }
+            ],
+            sleep: [
+                { t: "باسمك اللهم أموت وأحيا", n: 3 },
+                { t: "اللهم قني عذابك يوم تبعث عبادك", n: 3 },
+                { t: "اللهم إني أسألك حسن الخاتمة", n: 3 }
+            ]
+        };
+
+        // دالة لعرض إشعار
+        function showNotification(message) {
+            let notification = document.getElementById('notification');
+            notification.innerText = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000); // الإشعار يختفي بعد 3 ثوانٍ
+        }
+
+        // وظيفة لعرض إشعار تذكير بالأذكار
+        function showAzkarNotification() {
+            const randomIndex = Math.floor(Math.random() * azkar.morning.length);
+            showNotification(azkar.morning[randomIndex].t);
+        }
+
+        // تشغيل إشعارات تذكير بالأذكار كل 10 دقائق
+        setInterval(showAzkarNotification, 600000); // 600000 ملي ثانية = 10 دقائق
+
+    </script>
 
 </body>
 </html>
