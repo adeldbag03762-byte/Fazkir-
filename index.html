@@ -14,11 +14,12 @@
             padding: 0;
             margin: 0;
             text-align: center;
+            height: 100vh;
         }
 
         /* الخلفية */
         .background {
-            background-image: url('https://via.placeholder.com/1500x800/cccccc?text=%D8%AE%D9%84%D9%81%D9%8A%D8%A9+%D8%A5%D8%B3%D9%84%D8%A7%D9%85%D9%8A%D8%A9');
+            background-image: url('https://via.placeholder.com/1500x800/cccccc?text=%D8%AE%D9%84%D9%81%D9%8A%D8%A9+%D9%85%D8%B3%D8%AC%D8%AF');
             background-size: cover;
             background-position: center;
             position: absolute;
@@ -41,17 +42,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            font-family: 'Georgia', serif;
+        h1, h2 {
             color: #2c3e50;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: #34495e;
-            font-size: 24px;
-            margin-top: 20px;
+            font-family: 'Georgia', serif;
         }
 
         .name {
@@ -83,27 +76,27 @@
             margin-top: 50px;
         }
 
-        /* تنسيق الإشعارات */
-        #notification {
-            display: none;
-            position: fixed;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #3498db;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 18px;
-            z-index: 1000;
+        /* قائمة الأذكار */
+        .azkar-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
         }
 
-        /* إظهار القبلة */
-        #qibla-direction {
-            margin-top: 30px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2c3e50;
+        .azkar-list li {
+            padding: 8px;
+            background-color: #ecf0f1;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        /* تأثيرات عرض المحتوى */
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
         }
 
     </style>
@@ -111,103 +104,73 @@
 <body>
 
     <div class="background"></div> <!-- خلفية إسلامية -->
-    
+
     <div class="container">
         <h1>مرحباً بك في برنامج فذكر</h1>
         <h2>خدمات إسلامية مميزة</h2>
 
-        <h1>السلام عليكم،</h1>
-        <h2>إسمك في البرنامج:</h2>
         <div class="name">
             عبد الوكيل الحلبي
         </div>
 
         <!-- أذكار الصباح -->
-        <h2>أذكار الصباح</h2>
-        <ul>
-            <li>سبحان الله وبحمده</li>
-            <li>استغفر الله</li>
-            <li>اللهم إني أسالك العافية</li>
-            <li>اللهم صل وسلم على سيدنا محمد</li>
-        </ul>
+        <div class="content-box">
+            <h2>أذكار الصباح</h2>
+            <ul class="azkar-list">
+                <li>سبحان الله وبحمده</li>
+                <li>استغفر الله</li>
+                <li>اللهم إني أسالك العافية</li>
+                <li>اللهم صل وسلم على سيدنا محمد</li>
+            </ul>
+        </div>
 
         <!-- أذكار المساء -->
-        <h2>أذكار المساء</h2>
-        <ul>
-            <li>اللهم أجرني من النار</li>
-            <li>اللهم اهدني واهد بي</li>
-            <li>بسم الله الرحمن الرحيم</li>
-            <li>اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة</li>
-        </ul>
+        <div class="content-box">
+            <h2>أذكار المساء</h2>
+            <ul class="azkar-list">
+                <li>اللهم أجرني من النار</li>
+                <li>اللهم اهدني واهد بي</li>
+                <li>بسم الله الرحمن الرحيم</li>
+            </ul>
+        </div>
 
         <!-- أذكار النوم -->
-        <h2>أذكار النوم</h2>
-        <ul>
-            <li>باسمك اللهم أموت وأحيا</li>
-            <li>اللهم قني عذابك يوم تبعث عبادك</li>
-            <li>اللهم إني أسألك حسن الخاتمة</li>
-        </ul>
+        <div class="content-box">
+            <h2>أذكار النوم</h2>
+            <ul class="azkar-list">
+                <li>باسمك اللهم أموت وأحيا</li>
+                <li>اللهم قني عذابك يوم تبعث عبادك</li>
+                <li>اللهم إني أسألك حسن الخاتمة</li>
+            </ul>
+        </div>
 
-        <button class="button" onclick="showNotification()">عرض إشعار تذكير</button>
+        <!-- إمساكية رمضان -->
+        <div class="content-box">
+            <h2>إمساكية رمضان</h2>
+            <p>مواعيد الإفطار والسحور لشهر رمضان الكريم.</p>
+            <!-- يمكنك إضافة جدول إمساكية رمضان هنا -->
+        </div>
 
-        <!-- القبلة -->
-        <div id="qibla-direction"></div>
+        <!-- الأحاديث الأربعين النووية -->
+        <div class="content-box">
+            <h2>الأربعون النووية</h2>
+            <p>أحاديث من الأربعين النووية مع تفسير مبسط.</p>
+            <!-- يمكنك إضافة الأحاديث هنا -->
+        </div>
 
-        <button class="button" onclick="playAdhan()">تشغيل الأذان</button>
+        <!-- القرآن الكريم مع التفسير -->
+        <div class="content-box">
+            <h2>المصحف مع التفسير</h2>
+            <p>عرض القرآن الكريم مع التفسير.</p>
+            <!-- يمكنك إضافة Iframe للمصحف هنا -->
+        </div>
+
+        <button class="button" onclick="alert('أهلاً بك في برنامج فذكر')">ابدأ الآن</button>
     </div>
-
-    <div id="notification"></div> <!-- إشعار الأذكار -->
 
     <div class="footer">
         <p>جميع الحقوق محفوظة © 2026</p>
     </div>
-
-    <!-- إضافة صوت الأذان -->
-    <audio id="adhan-audio">
-        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav"> <!-- تغيير الرابط إلى صوت الأذان الفعلي -->
-        Your browser does not support the audio element.
-    </audio>
-
-    <script>
-        // دالة لعرض إشعار
-        function showNotification() {
-            let notification = document.getElementById('notification');
-            notification.innerText = "تذكر أن تقول: سبحان الله وبحمده!";
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000); // الإشعار يختفي بعد 3 ثوانٍ
-        }
-
-        // تشغيل صوت الأذان
-        function playAdhan() {
-            let adhan = document.getElementById('adhan-audio');
-            adhan.play();
-        }
-
-        // تحديد القبلة (التوجه نحو مكة)
-        function showQibla() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    
-                    // حساب اتجاه القبلة باستخدام مكتبة أو معادلة (يمكنك استخدام API)
-                    // هنا نعرض مثالًا بسيطًا
-                    const qiblaDirection = "التوجه نحو مكة: 10° شمال الشرق";
-                    document.getElementById('qibla-direction').innerText = qiblaDirection;
-                });
-            } else {
-                alert("الرجاء تمكين الوصول إلى الموقع.");
-            }
-        }
-
-        // تشغيل القبلة عند تحميل الصفحة
-        window.onload = function() {
-            showQibla();
-        }
-
-    </script>
 
 </body>
 </html>
