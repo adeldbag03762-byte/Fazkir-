@@ -77,6 +77,12 @@
             background-color: #3498db;
         }
 
+        .footer {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-top: 50px;
+        }
+
         /* تنسيق الإشعارات */
         #notification {
             display: none;
@@ -92,10 +98,12 @@
             z-index: 1000;
         }
 
-        .footer {
-            font-size: 16px;
-            color: #7f8c8d;
-            margin-top: 50px;
+        /* إظهار القبلة */
+        #qibla-direction {
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
         }
 
     </style>
@@ -114,21 +122,25 @@
             عبد الوكيل الحلبي
         </div>
 
-        <!-- الأذكار -->
+        <!-- أذكار الصباح -->
         <h2>أذكار الصباح</h2>
         <ul>
             <li>سبحان الله وبحمده</li>
             <li>استغفر الله</li>
             <li>اللهم إني أسالك العافية</li>
+            <li>اللهم صل وسلم على سيدنا محمد</li>
         </ul>
 
+        <!-- أذكار المساء -->
         <h2>أذكار المساء</h2>
         <ul>
             <li>اللهم أجرني من النار</li>
             <li>اللهم اهدني واهد بي</li>
             <li>بسم الله الرحمن الرحيم</li>
+            <li>اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة</li>
         </ul>
 
+        <!-- أذكار النوم -->
         <h2>أذكار النوم</h2>
         <ul>
             <li>باسمك اللهم أموت وأحيا</li>
@@ -137,6 +149,11 @@
         </ul>
 
         <button class="button" onclick="showNotification()">عرض إشعار تذكير</button>
+
+        <!-- القبلة -->
+        <div id="qibla-direction"></div>
+
+        <button class="button" onclick="playAdhan()">تشغيل الأذان</button>
     </div>
 
     <div id="notification"></div> <!-- إشعار الأذكار -->
@@ -144,6 +161,12 @@
     <div class="footer">
         <p>جميع الحقوق محفوظة © 2026</p>
     </div>
+
+    <!-- إضافة صوت الأذان -->
+    <audio id="adhan-audio">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav"> <!-- تغيير الرابط إلى صوت الأذان الفعلي -->
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         // دالة لعرض إشعار
@@ -154,6 +177,34 @@
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000); // الإشعار يختفي بعد 3 ثوانٍ
+        }
+
+        // تشغيل صوت الأذان
+        function playAdhan() {
+            let adhan = document.getElementById('adhan-audio');
+            adhan.play();
+        }
+
+        // تحديد القبلة (التوجه نحو مكة)
+        function showQibla() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    
+                    // حساب اتجاه القبلة باستخدام مكتبة أو معادلة (يمكنك استخدام API)
+                    // هنا نعرض مثالًا بسيطًا
+                    const qiblaDirection = "التوجه نحو مكة: 10° شمال الشرق";
+                    document.getElementById('qibla-direction').innerText = qiblaDirection;
+                });
+            } else {
+                alert("الرجاء تمكين الوصول إلى الموقع.");
+            }
+        }
+
+        // تشغيل القبلة عند تحميل الصفحة
+        window.onload = function() {
+            showQibla();
         }
 
     </script>
